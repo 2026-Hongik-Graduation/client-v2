@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const CATEGORY_BARS = [
   { label: "STAR", fill: "bg-primary-30", value: "16%" },
   { label: "성장·가치관", fill: "bg-primary-40", value: "16%" },
@@ -48,14 +50,14 @@ function AddExperiencePanel() {
           </div>
         </div>
 
-        <button
-          type="button"
-          className="flex h-12 items-center justify-center self-start rounded-[24px] bg-background-10 px-4 py-3"
+        <Link
+          href="/experiences/new"
+          className="flex h-12 items-center justify-center self-start rounded-[24px] bg-background-10 px-4 py-3 transition-opacity hover:opacity-90"
         >
           <span className="whitespace-nowrap text-center text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-primary-60">
             새 경험 추가하기 →
           </span>
-        </button>
+        </Link>
       </div>
     </div>
   );
