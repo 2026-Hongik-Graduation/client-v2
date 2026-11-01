@@ -25,17 +25,29 @@
   --color-text-tertiary: #b2b2b2;
   --color-text-inverse: #fcfcfc;
 
+  --color-primary-70: #19665c;
+
   /* Grayscale / background */
   --color-grayscale-10: #fcfcfc;
   --color-grayscale-20: #f5f5f5;
   --color-grayscale-30: #e8e8e8;
   --color-grayscale-40: #d4d4d4;
   --color-background-10: #fefefe;
+  --color-background-20: #fafbfb;
+  --color-background-30: #f5f6f6;
+  --color-background-40: #eceeee;
   --color-background-50: #dfe2e1;
+  --color-background-60: #c4cac9;
   --color-background-70: #9fa8a7;
+  --color-background-80: #6e7c7a;
+  --color-background-90: #404a48;
+  --color-background-100: #1c2120;
+
+  --color-text-disabled: #d4d4d4;
 
   /* Status */
   --color-status-success: #10b981;
+  --color-status-error: #ef4444;
 
   /* Spacing scale */
   --spacing-2xs: 4px;
@@ -52,6 +64,7 @@
   --spacing-8xl: 160px;
 
   /* Radii */
+  --radius-md-12: 12px;
   --radius-lg-24: 24px;
   --radius-xl-24: 24px;
   --radius-full-999: 999px;

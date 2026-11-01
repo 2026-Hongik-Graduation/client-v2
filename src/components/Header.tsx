@@ -1,4 +1,11 @@
-const NAV_ITEMS = ["경험정리", "자소서 관리", "지원현황", "면접"];
+import Link from "next/link";
+
+const NAV_ITEMS: { label: string; href: string }[] = [
+  { label: "경험정리", href: "/experiences" },
+  { label: "자소서 관리", href: "#" },
+  { label: "지원현황", href: "#" },
+  { label: "면접", href: "#" },
+];
 
 export function Header() {
   return (
@@ -15,14 +22,14 @@ export function Header() {
             />
           </a>
           <nav className="hidden items-center gap-4 md:flex">
-            {NAV_ITEMS.map((label) => (
-              <a
-                key={label}
-                href="#"
+            {NAV_ITEMS.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
                 className="flex items-center justify-center whitespace-nowrap p-4 text-[14px] font-medium tracking-[0.07px] text-text-secondary transition-colors hover:text-text-primary"
               >
-                {label}
-              </a>
+                {item.label}
+              </Link>
             ))}
           </nav>
         </div>

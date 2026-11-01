@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import Link from "next/link";
 
 function ReportCard() {
   return (
@@ -174,12 +175,12 @@ export function Hero() {
             </div>
 
             <div className="flex w-full flex-col items-start gap-4">
-              <a
-                href="#"
+              <Link
+                href="/experiences"
                 className="flex w-full items-center justify-center rounded-full bg-primary-60 px-10 py-4 text-center text-[18px] font-medium leading-[1.45] tracking-[-0.09px] text-text-inverse transition-opacity hover:opacity-90"
               >
                 내 경험 정리하러가기
-              </a>
+              </Link>
               <a
                 href="#"
                 className="flex w-full items-center justify-center rounded-full bg-background-10 px-10 py-4 text-center text-[18px] font-medium leading-[1.45] tracking-[-0.09px] text-text-secondary transition-opacity hover:opacity-90"
