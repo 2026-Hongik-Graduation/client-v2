@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/* Pretendard (Korean web font) is loaded via <link> in layout.tsx */
+
+/*
+ * Design tokens pulled from the Figma file (POFIT).
+ * Exposed to Tailwind v4 via @theme so they are usable as utilities
+ * (e.g. bg-primary-60, text-text-secondary, rounded-xl-24, p-md-16).
+ */
+@theme {
+  /* Primary palette */
+  --color-primary-10: #f1f9f8;
+  --color-primary-20: #def2f0;
+  --color-primary-30: #bce6e1;
+  --color-primary-40: #86d5ca;
+  --color-primary-50: #319689;
+  --color-primary-60: #267e72;
+  --color-primary-80: #134e46;
+  --color-primary-90: #0f332f;
+  --color-primary-100: #091b18;
+
+  /* Text */
+  --color-text-primary: #2b2b2b;
+  --color-text-secondary: #6b6b6b;
+  --color-text-tertiary: #b2b2b2;
+  --color-text-inverse: #fcfcfc;
+
+  /* Grayscale / background */
+  --color-grayscale-10: #fcfcfc;
+  --color-grayscale-20: #f5f5f5;
+  --color-grayscale-30: #e8e8e8;
+  --color-grayscale-40: #d4d4d4;
+  --color-background-10: #fefefe;
+  --color-background-50: #dfe2e1;
+  --color-background-70: #9fa8a7;
+
+  /* Status */
+  --color-status-success: #10b981;
+
+  /* Spacing scale */
+  --spacing-2xs: 4px;
+  --spacing-3xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 40px;
+  --spacing-3xl: 48px;
+  --spacing-4xl: 64px;
+  --spacing-5xl: 80px;
+  --spacing-7xl: 120px;
+  --spacing-8xl: 160px;
+
+  /* Radii */
+  --radius-lg-24: 24px;
+  --radius-xl-24: 24px;
+  --radius-full-999: 999px;
+
+  /* Fonts */
+  --font-sans: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-grayscale-10);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}

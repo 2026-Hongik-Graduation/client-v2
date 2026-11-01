@@ -1,0 +1,25 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="93.1442" height="14.6923" viewBox="0 0 93.1442 14.6923" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Macbook Pro Notch">
+<path id="Notch Background" d="M0 1.3873H3.15641C5.45535 1.3873 7.31901 3.25096 7.31901 5.5499V6.36712C7.31901 10.965 11.0463 14.6923 15.6442 14.6923H78.8881C82.7197 14.6923 85.8258 11.5862 85.8258 7.75465V5.5499C85.8258 3.25096 87.6894 1.3873 89.9884 1.3873H93.1442H0Z" fill="black"/>
+<g id="Macbook Pro Camera">
+<g id="Camera - BG" filter="url(#filter0_f_0_25717)">
+<ellipse cx="46.4284" cy="4.71379" rx="3.32656" ry="3.32626" fill="#131315"/>
+</g>
+<g id="Camera - Len" filter="url(#filter1_f_0_25717)">
+<ellipse cx="46.4287" cy="4.71363" rx="0.665312" ry="0.665251" fill="#1D4683"/>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_0_25717" x="41.7143" y="3.78786e-08" width="9.42819" height="9.42758" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="0.693767" result="effect1_foregroundBlur_0_25717"/>
+</filter>
+<filter id="filter1_f_0_25717" x="45.0696" y="3.35461" width="2.71816" height="2.71804" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="0.346884" result="effect1_foregroundBlur_0_25717"/>
+</filter>
+</defs>
+</svg>
