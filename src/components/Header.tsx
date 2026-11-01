@@ -3,7 +3,7 @@ import Link from "next/link";
 const NAV_ITEMS: { label: string; href: string }[] = [
   { label: "경험정리", href: "/experiences" },
   { label: "자소서 관리", href: "#" },
-  { label: "지원현황", href: "#" },
+  { label: "지원현황", href: "/applications" },
   { label: "면접", href: "#" },
 ];
 
