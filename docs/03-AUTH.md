@@ -1,14 +1,15 @@
 # 03. 로그인 / 회원가입 / 비밀번호 찾기 구현 계획
 
-상태: **부분 구현**. `/login` 시각 화면, 비밀번호 표시/숨기기 및 로그인 유지 토글 UI가 존재합니다. **실제 로그인/Google OAuth 및 회원가입·비밀번호 찾기는 미구현**입니다.
+상태: **부분 구현**. `/login` 시각 화면과 `/find-password`의 이메일 인증 1단계 UI가 존재합니다. **실제 로그인/Google OAuth, 코드 검증, 회원가입 및 비밀번호 재설정은 미구현**입니다.
 
 ### 현재 구현된 로그인 화면 (원격 `0402e76` 기준)
 - `src/app/login/page.tsx`: 데스크톱 카드+입력폼 2열 배치, SEO metadata.
 - `src/components/login/LoginCard.tsx`, `LoginForm.tsx`: 로고, 이메일/PW, eye 토글, 로그인 유지, 구글 로그인 버튼, 가입/비밀번호 찾기 링크.
 - `showPw`와 `keepLogin`은 React 로컬 상태로 동작합니다. `<form onSubmit={(e)=>e.preventDefault()}>`이므로 **실제 인증이나 서버 검증은 이루어지지 않습니다.**
-- 회원가입/비밀번호 찾기 링크는 현재 `href="#"`. 홈 헤더의 회원가입 버튼도 아직 `/login`으로 이동하므로 다음 작업에서 수정해야 합니다.
+- 회원가입 링크는 현재 `href="#"`이고 비밀번호 찾기는 `/find-password`로 이동합니다. 홈 헤더의 회원가입 버튼도 아직 `/login`으로 이동하므로 다음 작업에서 수정해야 합니다.
 - 새로 추가된 에셋: `public/figma/login-card.svg`, `login-logo.svg`, `icon-eye.svg`, `icon-google.svg` 등.
-- 선행 작업: 폼 검증/제출 상태 → 인증 API/세션 → 회원가입/비밀번호 찾기 → 화면별 Figma 오류/반응형 검증.
+- `src/app/find-password/page.tsx` + `src/components/login/FindPasswordForm.tsx`: 이메일/6자리 인증코드 입력·발송/인증 버튼·단계 표시의 **정적 UI**가 추가되었습니다. 인증 요청·코드 검증·다음 단계로 넘어가기 동작은 아직 없습니다.
+- 선행 작업: 폼 검증/제출 상태 → 인증 API/세션 → 회원가입/실제 비밀번호 재설정 → 화면별 Figma 오류/반응형 검증.
 
 ## Figma 화면과 캡처
 - [데스크톱 인증 섹션](https://www.figma.com/design/0wZM1igoWTo0vJt4Ncqpgl/Pofit-%ED%8F%AC%ED%95%8F?node-id=1-48162)
@@ -35,7 +36,7 @@
 ## 목표 URL 및 컴포넌트
 - `/login`: `LoginForm`, `PasswordField`, `RememberMe`, `SocialLoginButton`.
 - `/signup`: `SignUpWizard`, `EmailVerification`, `PasswordSetup`, `ProfileForm`, `CompletionDialog`.
-- `/forgot-password`: `VerifyEmail` → `ResetPassword` → `ResetSuccess`.
+- `/find-password` (**현재 생성된 경로**): `VerifyEmail` → `ResetPassword` → `ResetSuccess`를 순차 구현. 기존 `/forgot-password` 계획 경로와 혼용하지 말고 최종 URL 정책을 합의.
 - `(auth)/layout.tsx`: 데스크톱 브랜드 비주얼 + 오른쪽 폼, 컴팩트에서 여백/컬럼 재배치.
 - `src/features/auth/*`: 단계/검증/서버 요청·세션 처리; 실제 인증 API 확정 전 mock adapter.
 

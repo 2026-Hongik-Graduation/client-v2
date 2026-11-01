@@ -5,7 +5,7 @@
 
 ## 1. 기존 기술과 확장 원칙
 - 기존 코드: Next.js 16.4.3 (App Router), React 19.3.0, TypeScript, Tailwind 4, Motion.
-- 현재 라우트: `/`, `/login`, `/experiences`, `/experiences/new`, `/cover-letters/new`, `/applications` 기본 화면 구현. `src/app/layout.tsx`, `page.tsx`, `globals.css`와 기존 화면 컴포넌트는 보존.
+- 현재 라우트: `/`, `/login`, `/find-password`, `/experiences`, `/experiences/new`, `/cover-letters/new`, `/applications` 기본 화면 구현. `src/app/layout.tsx`, `page.tsx`, `globals.css`와 기존 화면 컴포넌트는 보존.
 - 설치·타입·빌드 기준은 저장소 `AGENTS.md` 및 설치된 `node_modules/next/dist/docs/` 지침에 맞춥니다.
 - 기존 `@theme`/Pretendard/assets 및 Motion 컴포넌트를 먼저 확인한 뒤 공통 UI 도입.
 - 사용자 데이터·비밀키는 클라이언트에 직접 넣지 않고 필요한 서버 API를 통해서만 접근.
@@ -21,7 +21,7 @@ src/
       layout.tsx
       login/page.tsx
       signup/page.tsx
-      forgot-password/page.tsx
+      find-password/page.tsx
     (workspace)/
       layout.tsx                 # 인증 헤더/쉘
       experiences/page.tsx
