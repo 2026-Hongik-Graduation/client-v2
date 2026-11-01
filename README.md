@@ -1,36 +1,263 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# POFIT (포핏) — Frontend `client-v2`
 
-## Getting Started
+> 취업 준비 과정에서 경험 정리 → 자기소개서 작성/첨삭 → 지원 현황 관리까지 연결하는 웹 서비스.
+>
+> 이 문서는 **현재 저장소에 실제 있는 구현**과 **Figma를 기준으로 앞으로 구현할 계획**을 구분하는 개발 로드맵입니다.
 
-First, run the development server:
+- **원격 저장소:** https://github.com/2026-Hongik-Graduation/client-v2
+- **Figma 디자인:** https://www.figma.com/design/0wZM1igoWTo0vJt4Ncqpgl/Pofit-%ED%8F%AC%ED%95%8F?node-id=0-1
+- **계획 기준일:** 2026-11-01 / 기준 코드: `main`, `6305e6f`
+- **현재 단계:** 홈 랜딩페이지 구현을 가져온 상태. 인증·경험·자소서·지원관리의 실제 기능 및 라우트는 미구현.
+- **개발 원칙:** 현재 구현을 보존하며 화면별로 작게 추가 → 시각·기능 검증 → API 연결 → 통합 검증.
 
-```bash
+## 1. 시작하기
+
+**기본 환경:** Node.js + npm, Next.js 16.4.3, React 19.3.0, TypeScript, Tailwind CSS 4, Motion.
+
+```powershell
+git clone https://github.com/2026-Hongik-Graduation/client-v2.git
+cd client-v2
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+브라우저: http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```powershell
+npm run lint
+npm run build
+npx tsc --noEmit
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- 최초 타입 검사 전에 Next.js가 생성하는 `LayoutProps` 등이 필요할 수 있으므로 초기 설치 직후에는 먼저 `npm run build` 또는 Next.js 타입 생성을 수행합니다.
+- `package-lock.json`을 사용하므로 팀에서 npm을 기본 패키지 관리자로 통일합니다. 저장소의 `pnpm-workspace.yaml`은 유지하되 변경이 필요할 때 별도 협의합니다.
+- `.env.local`은 Git에 올리지 않습니다. API 주소·인증 설정·AI 키 등은 실제 백엔드 계약이 정해진 뒤 문서화합니다.
+- 레포에 있는 `AGENTS.md` 지침을 따라 현재 Next.js의 설치된 문서(`node_modules/next/dist/docs/`)를 확인하고 코드 변경합니다.
 
-## Learn More
+## 2. 현재 구현 상태 (원격 `main` 기준)
 
-To learn more about Next.js, take a look at the following resources:
+| 영역 | 파일 / 현황 | 상태 |
+| --- | --- | --- |
+| 홈 페이지 | `src/app/page.tsx` | ✅ 구현됨 (시각·기능 QA 필요) |
+| 공통 헤더/푸터 | `src/components/Header.tsx`, `Footer.tsx` | ✅ 홈에서 사용 중 |
+| 홈 Hero | `src/components/sections/Hero.tsx` | ✅ 텍스트·CTA·디바이스 목업/애니메이션 |
+| 홈 소개·단계 | `IntroStory.tsx`, `Steps.tsx` | ✅ 소개 및 4단계 안내 |
+| 스크롤 애니메이션 | `src/components/Reveal.tsx` | ✅ Motion 컴포넌트 사용 |
+| 디자인 토큰 | `src/app/globals.css` | ✅ 초기 Figma 컬러·간격·반경·폰트 |
+| 로컬 에셋 | `public/figma/*` | ✅ 홈에 쓰이는 PNG·SVG 존재 |
+| 로그인/회원가입 | 화면/라우트 미구현 | ⬜ 예정 |
+| 경험 정리 | 화면/라우트 미구현 | ⬜ 예정 |
+| 자기소개서 작성 | 화면/라우트 미구현 | ⬜ 예정 |
+| 지원 현황 관리 | 화면/라우트 미구현 | ⬜ 예정 |
+| 백엔드/API/AI | 미연동 | ⬜ 계약 확정 필요 |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**현재 코드에서 확인된 후속 작업**
+- 헤더 네비게이션, 홈의 핵심 CTA와 로그인/회원가입 버튼에는 `href="#"` 링크가 있으므로 실제 라우트가 준비되면 연결해야 합니다.
+- `Reveal`은 `viewport.once: true`입니다. Figma 홈 메모에는 스크롤하여 화면에 다시 들어오면 애니메이션 재생을 원하는 내용이 있어 UX 의도 확인 후 조정합니다.
+- 홈은 여러 고정 픽셀 크기를 사용합니다. 1440/1024/720 뷰포트별 레이아웃과 오버플로를 점검해야 합니다.
+- 헤더의 **면접** 메뉴는 랜딩페이지 안내에만 존재하며 실제 면접 페이지 디자인 범위는 확인 후 별도 진행합니다.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 3. Figma 기준 화면 구조와 디자인 근거
 
-## Deploy on Vercel
+Figma의 **디자인페이지**에는 데스크톱(1440)과 컴팩트(1023~720) 시안, 별도 디자인 시스템이 있습니다. 페이지 노드가 아니라 **화면 그룹**이므로 개발할 때 각 하위 프레임에서 디자인 컨텍스트와 스크린샷을 다시 읽습니다.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| 영역 | 1440px 그룹 노드 | 1023~720px 그룹 노드 | 주요 상태 |
+| --- | --- | --- | --- |
+| 로그인·회원가입 | `1:48162` | `1:54745` | 로그인, 이메일 인증, 비밀번호 찾기/재설정, 회원가입 완료 |
+| 홈 | `1:48304` | `1:54896` | 홈 소개, 반응형, 스크롤 애니메이션 |
+| 경험 정리 | `1:48599` | `1:55094` | 대시보드, 작성, 대화형, 가져오기, 검색·필터, 예외 |
+| 자기소개서 | `1:51347` | `1:57395` | 신규 문서, 채용공고 분석, 문항, 초안, 첨삭, 버전 |
+| 지원 현황 | `1:53161` | `1:58837` | 칸반, 보드 추가·삭제·이름 변경 |
+| 디자인 시스템 | `1:60404` | 동일 페이지 | 타이포, 로고, 컬러, 간격, 레이아웃, 아이콘, 반경 |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**시안 해석 규칙**
+1. 화면 이름이 같은 여러 Figma 프레임은 종종 **상태 변형/에러 처리**입니다. 무조건 별도 URL로 만들지 않고 하나의 페이지와 상태 컴포넌트로 구성합니다.
+2. Figma 컴포넌트/변수를 우선 사용하며, 이미 다운로드된 `public/figma` 에셋을 재사용합니다. 이미지 자체를 화면 스크린샷으로 대체하지 않습니다.
+3. 데스크톱 1440과 컴팩트 1023~720을 우선 구현합니다. **720 미만 모바일 디자인은 확정되지 않았으므로** 기능 사용성이 유지되도록 임시 대응하고 추가 시안이 나오면 맞춥니다.
+4. Figma의 `IA` 페이지는 기능 구상 참고 자료이며, 화면·API의 최종 확정 명세와 동일하지 않습니다.
+5. 색상·폰트·간격은 `src/app/globals.css` 토큰과 Figma 원본을 대조합니다. Pretendard Variable 사용을 유지합니다.
+
+## 4. 목표 사용자 여정
+
+1. **홈**: 서비스 이해 → 회원가입/로그인 또는 경험 정리로 이동
+2. **가입/인증**: 이메일 확인 → 비밀번호 → 기본 인적사항/희망 직군 → 가입 완료
+3. **경험 정리**: 경험 태그 선택 → STAR 빠른 작성 / AI 대화형 / 자료 가져오기 → 경험 카드 저장
+4. **자기소개서**: 기업·직무·공고·마감일 등록 → 문항 입력·분석 → 경험 선택 → 초안 생성
+5. **첨삭/관리**: AI 대화로 문항 다듬기 → 버전 저장/비교 → 복사·PDF 출력
+6. **지원 현황**: 지원 회사/직무 등록 → 칸반 상태 이동 → 일정 및 결과 관리
+
+## 5. URL 설계안 (아직 생성되지 않은 경로 포함)
+
+| URL | 책임 | 비고 |
+| --- | --- | --- |
+| `/` | 홈 랜딩페이지 | **현재 구현됨** |
+| `/login` | 로그인 | 비밀번호 표시, 로그인 유지, 소셜 로그인 |
+| `/signup` | 회원가입 | 이메일 인증/비밀번호/인적사항 단계 |
+| `/forgot-password` | 비밀번호 찾기 | 인증 및 재설정 |
+| `/experiences` | 경험 대시보드 | 목록·검색·필터·빈 결과 |
+| `/experiences/new` | 새 경험 작성 | STAR / AI 대화 / 가져오기 선택 |
+| `/experiences/[id]` | 경험 상세·수정 | 저장·임시저장 |
+| `/cover-letters` | 자소서 대시보드 | 기업별 문서/문항 |
+| `/cover-letters/new` | 새 자소서 | 채용공고 URL·직무·문항 입력 |
+| `/cover-letters/[id]` | 자소서 편집 | 경험 연결·AI 첨삭·버전·출력 |
+| `/applications` | 지원 현황 관리 | 칸반·지원 카드 |
+
+모달/토스트/필터/유효성 검증 상태는 기본적으로 기존 URL 내 상태로 관리합니다. 인증이 필요한 영역은 실제 인증 도입 후 접근 제어합니다.
+
+## 6. 구현 로드맵
+
+### Phase 0 — 원격 코드 인수 및 현황 분석
+- [x] GitHub `main` 최신 구현을 기준으로 작업
+- [x] 현재 홈·컴포넌트·에셋·패키지 구성 확인
+- [x] Figma 데스크톱/컴팩트 그룹, IA 및 디자인 시스템 위치 파악
+- [x] 구현 계획과 완료 기준을 README에 기록
+- [x] 의존성 재설치 후 lint/타입/빌드로 기준 상태 검증 (최초 타입 생성 후 통과)
+
+### Phase 1 — 기존 홈 품질 보강 및 공통 디자인 시스템
+- [ ] 1440/1024/720 화면 스크린샷 비교, 의도치 않은 오버플로 점검
+- [ ] `Header`·`Footer`·`Reveal`·홈 CTA의 실제 이동/애니메이션 요구사항 정리
+- [ ] Pretendard, 색상, 타이포, spacing, radius, icon, breakpoints 토큰 검증
+- [ ] Button, TextField, Select, Checkbox, Modal, Dialog, Toast, Tabs, Badge, Card, EmptyState, Loading UI 구성
+- [ ] 기존 `public/figma` 에셋에 대한 사용처/크기/누락 검사 및 추가 원본 에셋 확보
+- [ ] 키보드 포커스, 이미지 대체 텍스트, reduced-motion 처리
+
+**완료 조건:** 홈의 주요 링크가 의도한 화면으로 이동하고, 공통 UI가 디자인 시안의 기본/오류/비활성 상태를 지원함.
+
+### Phase 2 — 회원가입·로그인·비밀번호 찾기
+- [ ] 로그인: 이메일·비밀번호 검증, password eye, 로그인 유지, 오류 안내
+- [ ] 가입: 이메일 입력/중복/인증코드 재발송/오류/만료 처리
+- [ ] 가입: 비밀번호 요건·불일치 처리, 인적사항(나이/성별/학교/직군), 완료 모달
+- [ ] 찾기: 가입 이메일 확인 → 인증 → 새 비밀번호 → 성공·실패 UX
+- [ ] 구글 로그인은 실제 인증 제공자/API 계약 확정 뒤 연결
+- [ ] 인증 전/후 네비게이션 및 보호 페이지 접근 흐름 정의
+
+**완료 조건:** 목 API에서도 모든 폼·예외·단계 전환이 동작하고, 실제 인증 연동 여부는 명확히 구분됨.
+
+### Phase 3 — 경험 정리
+- [ ] 경험 대시보드: 카드, 검색, 다중 태그 필터, 결과 없음, 상세 보기
+- [ ] 새 소재/경험 작성 유형 선택: **빠르게 작성**, **AI 대화형**, **가져오기**
+- [ ] 빠르게 작성: 상황(S)·과제(T)·행동(A)·결과(R) 입력; 태그별 대체 안내 문구
+- [ ] AI 대화형: 태그에 맞춘 첫 질문, 후속 대화, 정리 결과 확인·수정
+- [ ] 가져오기: 텍스트/링크/PDF 드래그 앤 드롭, 분석중/실패/용량 초과/빈 데이터
+- [ ] 임시저장, 이탈 확인, 수정/삭제, 저장 후 대시보드 반영
+- [ ] 경험 카드 데이터 모델과 자소서 연결용 선택 인터페이스 정의
+
+**완료 조건:** 적어도 빠른 작성 → 저장 → 목록 → 상세/수정 흐름이 실제 데이터 상태로 연결됨. AI/파일 분석은 준비된 API 범위까지 점진 적용.
+
+### Phase 4 — 자기소개서 대시보드·작성·첨삭
+- [ ] 기업명·직무·마감일·채용공고 URL/본문 등록 및 유효성/파싱 실패 처리
+- [ ] 기업/직무/공고 정보, 문항별 질문과 글자 수 제한 관리
+- [ ] 경험 카드 검색·태그 필터·선택, 문항에 경험 연결, 드래그 앤 드롭 UX
+- [ ] 기업/문항 분석 리포트 및 직무 인사이트의 패널 구성
+- [ ] 문항별 AI 초안 생성·재생성, 로딩/실패/취소/재시도 상태
+- [ ] 우측 AI 대화 첨삭, 버전별 저장·조회·복원, 현재 버전 표시
+- [ ] 최종 검토, 전체 복사, PDF 내보내기
+
+**완료 조건:** 기업별 자소서 생성 → 문항 편집 → 경험 연결 → 버전 저장/복원 흐름이 일관되게 작동함. AI 결과는 서버 계약 후 연결.
+
+### Phase 5 — 지원 현황 관리
+- [ ] 채용 단계 칸반(작성중/제출/서류/면접/최종)과 보드 레이아웃 구현
+- [ ] 지원 카드: 기업·직무·마감일·전형 일정·진행 결과 표시
+- [ ] 카드 추가/상세/수정/삭제, 컬럼 간 드래그 이동 및 상태 저장
+- [ ] 보드 추가·삭제·이름 변경, 확인 모달과 빈 상태/예외 상태
+- [ ] 이력서/포트폴리오/과제 여부 등 추가 메타데이터 설계
+- [ ] 모바일·키보드 환경에서 드래그 대신 이동 메뉴도 지원
+
+**완료 조건:** 화면 새로고침 후에도 지원 카드와 단계가 일관되게 유지됨(목 저장소 또는 백엔드 구현 범위에 맞춰 검증).
+
+### Phase 6 — 백엔드·AI 연동 및 데이터 안정화
+- [ ] API 계약 문서화: 인증, 사용자 프로필, 경험, 자기소개서, 버전, 지원현황
+- [ ] API 클라이언트/오류 규약, 네트워크 실패·권한 만료·재시도 UI 공통 처리
+- [ ] 입력 스키마 검증, 캐시/동기화, 로딩/낙관적 업데이트 정책 정의
+- [ ] AI 엔드포인트: 경험 대화, JD 분석, 문항 초안 생성, 첨삭/수정
+- [ ] 업로드: MIME·크기 제한, 서버 검증, 개인정보/취업 서류 취급 정책
+- [ ] API 키와 토큰은 클라이언트 번들에 노출하지 않고 서버 측에서 보관
+
+**완료 조건:** 목 데이터 없이 주요 CRUD·인증·AI 요청이 계약에 따라 정상/실패/권한없음에서 테스트됨.
+
+### Phase 7 — QA·배포 준비
+- [ ] 기능별 unit/component/E2E 테스트 및 접근성(키보드, 명도, 포커스) 검증
+- [ ] 1440/1024/720 및 작은 모바일 너비, Chrome/Edge의 레이아웃 점검
+- [ ] 디자인 원본의 이미지·SVG 사용 여부와 크기·위치·타이포 확인
+- [ ] 애니메이션: 스크롤 재진입, 스크롤 복원, reduced-motion, 성능 점검
+- [ ] 폼 유효성/인증 만료/네트워크 오류/업로드 실패/빈 화면 시나리오
+- [ ] lint, TypeScript, production build 통과 및 배포 환경변수 점검
+
+**완료 조건:** 핵심 사용자 여정 E2E 통과, 심각한 시각 회귀/빌드 오류 없음.
+
+## 7. 작업 우선순위
+
+| 우선순위 | 범위 | 이유 |
+| --- | --- | --- |
+| **P0** | 공통 UI, 홈 품질, 로그인/가입 UI, 경험 CRUD·STAR, 자소서 생성·문항 편집, 지원 칸반 기본 | 서비스 핵심 동선과 데이터 모델 확정 |
+| **P1** | AI 경험 대화·채용공고 분석·초안 생성·첨삭, 파일/링크 가져오기, PDF, 버전 비교 | 외부 API·문서 처리 복잡도 |
+| **P2** | 면접 훈련, 알림 자동화, 추가 모바일 시안, 고급 인사이트 | 화면/정책 확정 후 별도 계획 |
+
+## 8. 제안 폴더 구조 (현재 파일을 유지하며 점진적으로 추가)
+
+```text
+src/
+├─ app/
+│  ├─ page.tsx                 # 구현된 홈 (유지)
+│  ├─ layout.tsx
+│  ├─ globals.css
+│  ├─ (auth)/                  # 예정: login, signup, forgot-password
+│  └─ (workspace)/             # 예정: experiences, cover-letters, applications
+├─ components/
+│  ├─ Header.tsx / Footer.tsx / Reveal.tsx  # 기존 구현 (유지)
+│  ├─ sections/               # 기존 홈 섹션 (유지)
+│  ├─ ui/                     # 예정: 공통 입력·버튼·모달·피드백
+│  └─ features/               # 예정: 기능별 화면 컴포넌트
+├─ features/                  # 예정: 훅·서비스·데이터 접근 모듈
+├─ lib/                       # 예정: API 클라이언트·라우트·유틸
+└─ types/                     # 예정: 도메인 타입
+public/
+└─ figma/                     # 기존 홈 SVG/PNG (유지)
+```
+
+- 파일/모듈을 새로 만들 때 기존 `Header`·`Reveal`·토큰·에셋을 확인한 다음 재사용합니다.
+- App Router의 route group `(auth)`/`(workspace)`은 URL에 포함되지 않습니다.
+- 클라이언트 상태가 필요한 곳만 `"use client"`를 사용하고, 자격증명/API 키는 서버에서 처리합니다.
+- 구현별 요구 패키지(폼 검증, 상태 캐시, dnd-kit 등)는 실제 필요한 Phase에 도입합니다.
+
+## 9. 도메인/API 계약 초안 (백엔드와 협의 전)
+
+| 모델 | 필수 필드 초안 | 주요 작업 |
+| --- | --- | --- |
+| UserProfile | id, email, name?, age?, gender?, school?, desiredJobs[] | 회원가입/조회/수정 |
+| Experience | id, title, category, inputMode, STAR?, summary, status, updatedAt | 목록/작성/수정/삭제/임시저장 |
+| CoverLetter | id, company, role, deadline?, jobPosting?, questions[] | 기업별 생성/조회/관리 |
+| QuestionDraft | id, questionId, content, limit?, linkedExperienceIds[], versions[] | 초안/편집/첨삭/버전 |
+| Application | id, company, role, stage, deadlines?, attachments? | 칸반 CRUD/이동 |
+
+- 필드명/열거형/날짜 형식/에러코드/권한은 **제안값**이며 서버 스펙 확정 전 실제 API로 간주하지 않습니다.
+- 인증: 세션 방식, 리프레시, 구글 OAuth 리다이렉트, CSRF/토큰 저장 정책 협의가 필요합니다.
+- AI: 스트리밍 여부, 대화 이력, 사용량 제한, 결과 생성 실패 및 민감 정보 전송 정책을 확정해야 합니다.
+- 업로드: 파일 크기·확장자, 저장 위치/보존 기간, 악성 파일 검증, 삭제 정책을 결정해야 합니다.
+
+## 10. 개발 체크리스트 / PR 완료 기준
+
+한 화면을 작업할 때마다:
+1. Figma 해당 **프레임 ID**와 스크린샷, 컴포넌트 변형/에러 상태를 확인합니다.
+2. 정적 이미지/SVG는 정확한 원본을 로컬 파일로 저장하고 호출 위치·크기를 점검합니다.
+3. 화면·하위 상태·라우팅·접근성·반응형의 동작을 구현합니다.
+4. 의존 API가 아직 없다면 **목 UI**와 **실제 통합 완료**를 구분해 기록합니다.
+5. PR 설명에 화면 캡처(1440/1024/720), 시나리오, 남은 이슈, 관련 Figma 노드를 적습니다.
+6. `npm run lint`, `npx tsc --noEmit`, `npm run build`를 통과시킵니다.
+
+**브랜치 운영 제안:** 기능 단위 브랜치 → PR 리뷰 → `main` 병합. 급한 README 등 문서성 변경도 최신 `main`을 동기화한 다음 충돌 없이 push합니다.
+
+## 11. 의사결정이 남은 항목
+
+- [ ] 실제 인증/OAuth/세션 및 백엔드 API 스펙
+- [ ] AI 공급자, 대화/초안/첨삭 API 비용·쿼터·에러 규약
+- [ ] PDF/Notion/링크 가져오기 지원 범위 및 파일 보존 정책
+- [ ] 720px 미만 모바일 시안 확정 여부
+- [ ] 면접 기능의 실제 디자인/1차 MVP 포함 여부
+- [ ] 프로덕션 도메인, 환경변수, 배포/모니터링 방식
+
+---
+
+> **현재 README는 구현 계획이며, 체크되지 않은 기능이 완성되었다는 뜻이 아닙니다.**
+>
+> 다음 순서: 원격 코드 검증 → Phase 1의 홈 QA·공통 컴포넌트 → Phase 2 인증 UI 구현.
