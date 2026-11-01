@@ -122,7 +122,7 @@ export function LoginForm() {
               회원가입하기
             </Link>
             <Link
-              href="#"
+              href="/find-password"
               className="text-right text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-text-secondary underline"
             >
               비밀번호 찾기
