@@ -8,7 +8,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "경험", step: 1, href: "/experiences" },
-  { label: "자소서", step: 2, href: "#" },
+  { label: "자소서", step: 2, href: "/cover-letters/new" },
   { label: "지원", step: 3, href: "/applications" },
   { label: "면접", step: 4, href: "#" },
 ];
