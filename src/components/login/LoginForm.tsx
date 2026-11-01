@@ -1,0 +1,135 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+
+export function LoginForm() {
+  const [showPw, setShowPw] = useState(false);
+  const [keepLogin, setKeepLogin] = useState(false);
+
+  return (
+    <div className="flex w-full max-w-[516px] flex-1 flex-col gap-20">
+      {/* Brand logo */}
+      <div className="h-9 w-[63px] shrink-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/figma/login-logo.svg" alt="POFIT" className="h-full w-full" />
+      </div>
+
+      <form className="flex w-full flex-1 flex-col gap-8" onSubmit={(e) => e.preventDefault()}>
+        <div className="flex w-full flex-col gap-4">
+          <div className="flex w-full flex-col gap-4">
+            {/* Email */}
+            <div className="flex w-full flex-col gap-2">
+              <label className="text-[14px] font-semibold leading-[1.45] tracking-[0.07px] text-text-primary">
+                이메일
+              </label>
+              <input
+                type="email"
+                placeholder="example@email.com"
+                className="h-12 w-full rounded-[24px] border border-grayscale-40 bg-background-30 px-4 py-3 text-[16px] font-normal leading-[1.6] text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary-40"
+              />
+            </div>
+
+            {/* Password */}
+            <div className="flex w-full flex-col gap-2">
+              <label className="text-[14px] font-semibold leading-[1.45] tracking-[0.07px] text-text-primary">
+                비밀번호
+              </label>
+              <div className="flex h-12 w-full items-center justify-between rounded-[24px] border border-grayscale-40 bg-background-30 px-4 py-3 focus-within:ring-2 focus-within:ring-primary-40">
+                <input
+                  type={showPw ? "text" : "password"}
+                  placeholder="password"
+                  className="min-w-0 flex-1 bg-transparent text-[16px] font-normal leading-[1.6] text-text-primary placeholder:text-text-tertiary focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPw((v) => !v)}
+                  className="block size-6 shrink-0"
+                  aria-label={showPw ? "비밀번호 숨기기" : "비밀번호 보기"}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/figma/icon-eye.svg" alt="" className="h-full w-full" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Keep login */}
+          <button
+            type="button"
+            onClick={() => setKeepLogin((v) => !v)}
+            className="flex items-center gap-[9px]"
+          >
+            <span
+              className={`flex size-5 items-center justify-center rounded-full border-2 ${
+                keepLogin ? "border-primary-60 bg-primary-60" : "border-background-60"
+              }`}
+            >
+              {keepLogin && (
+                <span className="size-1.5 rounded-full bg-text-inverse" />
+              )}
+            </span>
+            <span className="whitespace-nowrap text-[14px] font-semibold leading-[1.45] tracking-[0.07px] text-text-secondary">
+              로그인 유지
+            </span>
+          </button>
+        </div>
+
+        <div className="flex w-full flex-1 flex-col gap-4">
+          <div className="flex w-full flex-col items-end gap-6">
+            {/* Login button */}
+            <button
+              type="submit"
+              className="flex h-12 w-full items-center justify-center rounded-[24px] bg-background-70 px-4 py-3"
+            >
+              <span className="text-center text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-text-disabled">
+                로그인하기
+              </span>
+            </button>
+
+            {/* Divider */}
+            <div className="flex w-full items-center gap-[21px]">
+              <span className="h-px min-w-0 flex-1 bg-grayscale-40" />
+              <span className="text-[14px] font-semibold leading-[1.45] tracking-[0.07px] text-text-tertiary">
+                or
+              </span>
+              <span className="h-px min-w-0 flex-1 bg-grayscale-40" />
+            </div>
+
+            {/* Google login */}
+            <button
+              type="button"
+              className="flex h-12 w-full items-center justify-center rounded-[24px] border border-text-tertiary bg-background-10 px-4 py-3"
+            >
+              <span className="flex items-center gap-2">
+                <span className="block size-6">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/figma/icon-google.svg" alt="" className="h-full w-full" />
+                </span>
+                <span className="text-center text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-text-primary">
+                  구글 로그인 하기
+                </span>
+              </span>
+            </button>
+          </div>
+
+          {/* Footer links */}
+          <div className="flex w-full items-center justify-between px-2.5">
+            <Link
+              href="#"
+              className="text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-primary-60 underline"
+            >
+              회원가입하기
+            </Link>
+            <Link
+              href="#"
+              className="text-right text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-text-secondary underline"
+            >
+              비밀번호 찾기
+            </Link>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+}
