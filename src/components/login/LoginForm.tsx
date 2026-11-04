@@ -1,11 +1,38 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState, type FormEvent } from "react";
 
 export function LoginForm() {
+  const router = useRouter();
   const [showPw, setShowPw] = useState(false);
   const [keepLogin, setKeepLogin] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError("");
+    setPending(true);
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json",
+          "x-pofit-keep-login": keepLogin ? "1" : "0" },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) throw new Error("Login failed");
+      router.replace("/experiences");
+      router.refresh();
+    } catch {
+      setError("로그인에 실패했습니다. 이메일과 비밀번호 또는 서버 연결을 확인해 주세요.");
+    } finally {
+      setPending(false);
+    }
+  }
 
   return (
     <div className="flex w-full max-w-[516px] flex-1 flex-col gap-20">
@@ -15,7 +42,7 @@ export function LoginForm() {
         <img src="/figma/login-logo.svg" alt="POFIT" className="h-full w-full" />
       </div>
 
-      <form className="flex w-full flex-1 flex-col gap-8" onSubmit={(e) => e.preventDefault()}>
+      <form className="flex w-full flex-1 flex-col gap-8" onSubmit={handleSubmit}>
         <div className="flex w-full flex-col gap-4">
           <div className="flex w-full flex-col gap-4">
             {/* Email */}
@@ -25,6 +52,10 @@ export function LoginForm() {
               </label>
               <input
                 type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
                 placeholder="example@email.com"
                 className="h-12 w-full rounded-[24px] border border-grayscale-40 bg-background-30 px-4 py-3 text-[16px] font-normal leading-[1.6] text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary-40"
               />
@@ -38,6 +69,10 @@ export function LoginForm() {
               <div className="flex h-12 w-full items-center justify-between rounded-[24px] border border-grayscale-40 bg-background-30 px-4 py-3 focus-within:ring-2 focus-within:ring-primary-40">
                 <input
                   type={showPw ? "text" : "password"}
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
                   placeholder="password"
                   className="min-w-0 flex-1 bg-transparent text-[16px] font-normal leading-[1.6] text-text-primary placeholder:text-text-tertiary focus:outline-none"
                 />
@@ -80,12 +115,14 @@ export function LoginForm() {
             {/* Login button */}
             <button
               type="submit"
-              className="flex h-12 w-full items-center justify-center rounded-[24px] bg-background-70 px-4 py-3"
+              disabled={pending}
+              className="flex h-12 w-full items-center justify-center rounded-[24px] bg-background-70 px-4 py-3 disabled:opacity-50"
             >
               <span className="text-center text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-text-disabled">
-                로그인하기
+                {pending ? "로그인 중..." : "로그인하기"}
               </span>
             </button>
+            {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
 
             {/* Divider */}
             <div className="flex w-full items-center gap-[21px]">
