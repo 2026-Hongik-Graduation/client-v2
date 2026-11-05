@@ -158,7 +158,7 @@ export function Hero() {
                 자소서는 늘 비슷하고, 기업분석은 어렵다면
               </p>
               <div className="flex items-center">
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                   <div className="h-[35.505px] w-[137.122px] shrink-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -167,7 +167,7 @@ export function Hero() {
                       className="h-full w-full"
                     />
                   </div>
-                  <p className="whitespace-nowrap text-[36px] font-bold leading-[1.3] tracking-[-0.54px] text-text-primary">
+                  <p className="text-[24px] font-bold leading-[1.3] tracking-[-0.54px] text-text-primary sm:whitespace-nowrap sm:text-[36px]">
                     과 함께하세요.
                   </p>
                 </div>
@@ -177,13 +177,13 @@ export function Hero() {
             <div className="flex w-full flex-col items-start gap-4">
               <Link
                 href="/experiences"
-                className="flex w-full items-center justify-center rounded-full bg-primary-60 px-10 py-4 text-center text-[18px] font-medium leading-[1.45] tracking-[-0.09px] text-text-inverse transition-opacity hover:opacity-90"
+                className="flex w-full items-center justify-center rounded-full bg-primary-60 px-4 py-4 text-center text-base sm:px-10 sm:text-[18px] font-medium leading-[1.45] tracking-[-0.09px] text-text-inverse transition-opacity hover:opacity-90"
               >
                 내 경험 정리하러가기
               </Link>
               <a
                 href="#"
-                className="flex w-full items-center justify-center rounded-full bg-background-10 px-10 py-4 text-center text-[18px] font-medium leading-[1.45] tracking-[-0.09px] text-text-secondary transition-opacity hover:opacity-90"
+                className="flex w-full items-center justify-center rounded-full bg-background-10 px-4 py-4 text-center text-base sm:px-10 sm:text-[18px] font-medium leading-[1.45] tracking-[-0.09px] text-text-secondary transition-opacity hover:opacity-90"
               >
                 자소서 생성하러 가기
               </a>

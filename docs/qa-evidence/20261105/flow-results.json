@@ -1,0 +1,77 @@
+{
+  "results": [
+    {
+      "id": "G0-DEV-BYPASS",
+      "status": "PASS"
+    },
+    {
+      "id": "G1-QUICK-CREATE",
+      "status": "PASS"
+    },
+    {
+      "id": "G1-DRAFT-RELOAD",
+      "status": "PASS"
+    },
+    {
+      "id": "G1-STAR-COMPLETE",
+      "status": "PASS"
+    },
+    {
+      "id": "G2-COVER-CREATE",
+      "status": "PASS"
+    },
+    {
+      "id": "G2-QUESTION-SAVE",
+      "status": "PASS"
+    },
+    {
+      "id": "G2-LIMIT-BLOCK",
+      "status": "PASS"
+    },
+    {
+      "id": "G2-LINK-EXPERIENCE",
+      "status": "PASS"
+    },
+    {
+      "id": "G4-MOCK-ANALYSIS",
+      "status": "PASS"
+    },
+    {
+      "id": "G4-MOCK-DRAFT",
+      "status": "PASS"
+    },
+    {
+      "id": "G4-MOCK-CHAT-HISTORY",
+      "status": "PASS"
+    },
+    {
+      "id": "G2-VERSION-SAVE",
+      "status": "PASS"
+    },
+    {
+      "id": "G3-KANBAN-EXISTENCE",
+      "status": "PASS"
+    },
+    {
+      "id": "G3-STAGES-PERSIST",
+      "status": "PASS"
+    },
+    {
+      "id": "G5-INTERVIEW-LOCAL-SAVE",
+      "status": "PASS"
+    },
+    {
+      "id": "G5-TXT-EXPORT",
+      "status": "PASS"
+    },
+    {
+      "id": "G0-LOGOUT-GUARD",
+      "status": "PASS"
+    },
+    {
+      "id": "G0-PROXY-CROSS-ORIGIN",
+      "status": "PASS"
+    }
+  ],
+  "network": []
+}

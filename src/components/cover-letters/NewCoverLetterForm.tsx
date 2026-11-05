@@ -71,7 +71,7 @@ export function NewCoverLetterForm() {
             기업 정보와 채용공고를 먼저 저장하고, 자소서 문항 및 경험을 연결하세요.
           </p>
         </div>
-        <span className="rounded-3xl bg-primary-20 px-4 py-2 text-xs text-primary-60">1/4 · 기본 정보</span>
+        <span className="rounded-3xl bg-primary-20 px-4 py-2 text-xs text-primary-70">1/4 · 기본 정보</span>
       </div>
       <div className="flex flex-wrap items-center gap-2" aria-label="작성 단계">
         {steps.map((step, i) => (

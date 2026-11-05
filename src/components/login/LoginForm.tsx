@@ -144,7 +144,7 @@ export function LoginForm() {
               disabled={pending}
               className="flex h-12 w-full items-center justify-center rounded-[24px] bg-background-70 px-4 py-3 disabled:opacity-50"
             >
-              <span className="text-center text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-text-disabled">
+              <span className="text-center text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-text-primary">
                 {pending ? "로그인 중..." : "로그인하기"}
               </span>
             </button>
