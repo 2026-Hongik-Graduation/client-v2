@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { coverApi, type CoverQuestion, type CoverExperienceLink } from "@/lib/cover-letter-api";
 import { tagInfo, type ExperienceRecord } from "@/lib/experience-api";
+import { CoverQuestionAiPanel } from "./CoverQuestionAiPanel";
 
 type Props = {
   coverId: string; question: CoverQuestion; index: number; total: number;
@@ -20,6 +21,7 @@ export function CoverQuestionCard({
   const [pending, setPending] = useState(false);
   const [linksLoading, setLinksLoading] = useState(false);
   const [showLinks, setShowLinks] = useState(false);
+  const [showAi, setShowAi] = useState(false);
   const [links, setLinks] = useState<CoverExperienceLink[]>([]);
   const [selected, setSelected] = useState("");
   const [error, setError] = useState("");
@@ -122,22 +124,40 @@ export function CoverQuestionCard({
       {error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
       {notice && <p role="status" className="text-sm text-primary-60">{notice}</p>}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <button type="button" disabled={pending} onClick={async () => {
-          if (!showLinks) await reloadLinks();
-          setShowLinks(!showLinks);
-        }} className="rounded-3xl border border-primary-60 px-4 py-3 text-sm text-primary-60">
-          {showLinks ? "경험 연결 닫기" : "저장한 경험 연결하기"}
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button type="button" disabled={pending} onClick={async () => {
+            if (!showLinks) await reloadLinks();
+            setShowLinks(!showLinks);
+          }} className="rounded-3xl border border-primary-60 px-4 py-3 text-sm text-primary-60">
+            {showLinks ? "경험 연결 닫기" : "저장한 경험 연결하기"}
+          </button>
+          <button type="button" onClick={() => setShowAi(value => !value)}
+            disabled={pending} aria-expanded={showAi}
+            className="rounded-3xl border border-primary-60 bg-primary-10 px-4 py-3 text-sm font-semibold text-primary-70">
+            {showAi ? "AI 도우미 닫기" : "AI 분석·초안·첨삭 ✨"}
+          </button>
+        </div>
         <button type="button" disabled={pending || !dirty || count > limit} onClick={save}
           className="rounded-3xl bg-primary-60 px-5 py-3 text-sm text-white disabled:opacity-40">
           {pending ? "처리 중..." : dirty ? "이 문항 저장" : "저장됨"}
         </button>
       </div>
+      {showAi && (
+        <CoverQuestionAiPanel coverId={coverId} question={question}
+          currentAnswer={answer} experiences={experiences}
+          questionConfigDirty={text !== question.questionText || limitText !== String(question.characterLimit)}
+          onApply={suggestion => {
+            if (pending) return;
+            setAnswer(suggestion); setError("");
+            setNotice("AI 제안문을 답변 입력란에 반영했어요. ‘이 문항 저장’을 눌러 확정해 주세요.");
+          }} />
+      )}
       {showLinks && (
         <section className="flex flex-col gap-4 rounded-2xl border border-background-50 bg-background-10 p-5">
           <h4 className="text-sm font-semibold">문항에 연결할 경험</h4>
           <p className="text-xs text-text-secondary">
-            연결은 참고 자료를 선택하는 기능이며, AI가 답변을 자동 생성하지는 않습니다.
+            경험을 연결한 뒤 ‘AI 도우미’에서 사용할 경험을 선택할 수 있어요.
+            경험만 연결하면 AI가 자동으로 답변을 생성하지는 않습니다.
           </p>
           {linksLoading && <p role="status" className="text-sm">연결된 경험 불러오는 중...</p>}
           {!linksLoading && links.map(link => {

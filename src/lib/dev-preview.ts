@@ -28,6 +28,10 @@ type Posting = { id: string; coverLetterId: string; url: string | null; jdOrigin
   qualifications: string | null; preferences: string | null; hiringProcess: string | null };
 type Version = { id: string; coverLetterId: string; label: string; createdAt: string; snapshotJson: string };
 type Link = { id: string; questionId: string; experienceId: string; displayOrder: number };
+type PreviewAiTurn = { sequenceNo: number; requestId: string; questionType: string;
+  experienceIds: string[]; originalText: string; instruction: string; revisionType: string;
+  revisedText: string; characterCount: number; changeReasons: string[]; warnings: string[];
+  provider: string; isMock: boolean; promptVersion: string; createdAt: string };
 type ApplicationDetails = {
   coverLetterId: string; deadline: string | null; interviewDate: string | null;
   documentResult: "PENDING" | "PASSED" | "FAILED" | null;
@@ -35,9 +39,10 @@ type ApplicationDetails = {
 };
 type Store = { covers: Cover[]; questions: Record<string, Question[]>; versions: Record<string, Version[]>;
   postings: Record<string, Posting>; links: Record<string, Link[]>; experiences: Experience[];
-  answers: Record<string, ExpAnswer[]>; applicationDetails: Record<string, ApplicationDetails> };
+  answers: Record<string, ExpAnswer[]>; applicationDetails: Record<string, ApplicationDetails>;
+  aiTurns: Record<string, PreviewAiTurn[]> };
 const fresh = (): Store => ({ covers: [], questions: {}, versions: {}, postings: {}, links: {}, experiences: [],
-  answers: {}, applicationDetails: {} });
+  answers: {}, applicationDetails: {}, aiTurns: {} });
 const load = (): Store => {
   try { return { ...fresh(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") }; }
   catch { return fresh(); }
@@ -164,6 +169,7 @@ function handler(path: string, init: RequestInit = {}): unknown {
     store.covers = store.covers.filter(c => c.id !== id);
     delete store.questions[id]; delete store.versions[id]; delete store.postings[id];
     delete store.applicationDetails[id];
+    for (const key of Object.keys(store.aiTurns)) if (key.startsWith(id + "/")) delete store.aiTurns[key];
     return done({ deleted: true });
   }
   if (child === "application-detail") {
@@ -216,10 +222,71 @@ function handler(path: string, init: RequestInit = {}): unknown {
       return done(store.questions[id]);
     }
     const q = requireFound(list.find(item => item.id === sub), "문항");
+    const aiKey = id + "/" + sub;
+    const aiMeta = { provider: "LOCAL_PREVIEW", isMock: true, promptVersion: "local-preview-v1",
+      correlationId: "preview-" + sub, warnings: ["MOCK_ONLY"] };
+    const cp = (value: string) => [...value].length;
+    const selected = (Array.isArray(data.experienceIds) ? data.experienceIds : []) as string[];
+    const selectedIds = selected.filter(experienceId =>
+      (store.links[sub] || []).some(link => link.experienceId === experienceId));
+    if (extra === "analyze" && method === "POST") {
+      const type = q.questionText.includes("지원") ? "MOTIVATION" : "JOB_COMPETENCY";
+      return { ...aiMeta, questionType: type,
+        evaluationIntent: "개발 미리보기: 문항의 의도를 직접 분석해 보세요.",
+        evidenceQuote: "", recommendedSkills: ["구체적인 경험", "직무 연결"] };
+    }
+    if (extra === "strategy" && method === "POST") return {
+      ...aiMeta, strengths: ["개발 미리보기용 작성 전략 예시입니다."],
+      evidenceGaps: ["연결한 경험의 실제 행동과 성과를 확인하세요."],
+      nextActions: ["상황→행동→결과→직무 연관성의 순서로 작성해 보세요."],
+    };
+    if (extra === "draft" && method === "POST") {
+      if (!selectedIds.length || selectedIds.length !== selected.length) throw new Error("연결된 경험을 선택해 주세요.");
+      const draft = "[개발 미리보기 · AI 생성 아님]\\n" +
+        "이 문항에 답하려면 경험의 상황과 나의 행동, 실제 결과를 구체적으로 작성하세요. " +
+        "연결 경험을 읽어 사실을 자동 생성하지 않습니다.\\n" +
+        "문항: " + q.questionText.slice(0, 160);
+      return { ...aiMeta, text: draft, characterCount: cp(draft),
+        characterLimit: q.characterLimit, usedExperienceIds: selectedIds, changeReasons: [] };
+    }
+    if (extra === "revise" && method === "POST") {
+      const original = String(data.originalText || "");
+      if (!original.trim()) throw new Error("먼저 답변을 작성해 주세요.");
+      const revised = "[개발 미리보기 · 첨삭 예시 아님]\\n" + original;
+      return { ...aiMeta, text: revised, characterCount: cp(revised),
+        characterLimit: q.characterLimit, usedExperienceIds: [], changeReasons: ["미리보기는 실제 첨삭을 수행하지 않습니다."] };
+    }
+    if (extra === "ai-chat" && parts[5] === "turns") {
+      const turns = store.aiTurns[aiKey] || [];
+      if (method === "GET") {
+        const page = Math.max(0, Number(url.searchParams.get("page") || 0));
+        const size = Math.min(50, Math.max(1, Number(url.searchParams.get("size") || 20)));
+        return turns.slice(page * size, (page + 1) * size);
+      }
+      if (method === "POST") {
+        const current = String(data.currentDraft || "");
+        const instruction = String(data.instruction || "");
+        if (!current.trim() || !instruction.trim()) throw new Error("현재 답변과 첨삭 요청을 입력해 주세요.");
+        const requestId = String(data.requestId || uuid());
+        const prior = turns.find(turn => turn.requestId === requestId);
+        if (prior) return prior;
+        const output = "[개발 미리보기 · 실제 AI 첨삭 아님]\\n" + current;
+        const turn: PreviewAiTurn = { sequenceNo: turns.length + 1, requestId,
+          questionType: String(data.questionType || "JOB_COMPETENCY"),
+          experienceIds: selectedIds, originalText: current, instruction,
+          revisionType: String(data.revisionType || "GENERAL"), revisedText: output,
+          characterCount: cp(output), changeReasons: ["AI 서비스가 아닌 개발용 예시입니다."],
+          warnings: ["MOCK_ONLY"], provider: "LOCAL_PREVIEW", isMock: true,
+          promptVersion: "local-preview-v1", createdAt: now() };
+        store.aiTurns[aiKey] = [...turns, turn];
+        return done(turn);
+      }
+    }
     if (!extra && method === "PATCH") return done(Object.assign(q, data));
     if (!extra && method === "DELETE") {
       store.questions[id] = list.filter(item => item.id !== sub).map((item, i) => ({ ...item, displayOrder: i + 1 }));
-      delete store.links[sub]; return done({ deleted: true });
+      delete store.links[sub]; delete store.aiTurns[id + "/" + sub];
+      return done({ deleted: true });
     }
     if (extra === "experiences") {
       const links = store.links[sub] || [];
