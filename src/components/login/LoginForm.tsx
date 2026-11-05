@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { startPreviewMode, stopPreviewMode } from "@/lib/dev-preview";
 
 export function LoginForm() {
   const router = useRouter();
@@ -12,6 +13,12 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
+
+  function enterPreview() {
+    startPreviewMode();
+    router.replace("/cover-letters");
+    router.refresh();
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -27,8 +34,11 @@ export function LoginForm() {
       if (!res.ok) throw new Error(res.status === 401
         ? "이메일 또는 비밀번호를 확인해 주세요."
         : res.status >= 500 ? "백엔드 연결을 확인해 주세요." : "로그인 요청을 확인해 주세요.");
+      // Real login always exits the local-only preview, avoiding mock data shadowing authenticated data.
+      stopPreviewMode();
       const requested = new URLSearchParams(window.location.search).get("next");
-      const safeNext = requested && /^\/(?:experiences(?:\/[a-zA-Z0-9-]+)?|onboarding)$/.test(requested)
+      const safeNext = requested &&
+        /^\/(?:(?:experiences|cover-letters)(?:\/[a-zA-Z0-9-]+)?|onboarding)$/.test(requested)
         ? requested : "/experiences";
       try {
         const profileRes = await fetch("/api/members/me/profile", { cache: "no-store" });
@@ -139,6 +149,17 @@ export function LoginForm() {
               </span>
             </button>
             {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+            {process.env.NODE_ENV === "development" && (
+              <div className="w-full rounded-2xl border border-primary-40 bg-primary-10 p-3">
+                <button type="button" onClick={enterPreview}
+                  className="w-full rounded-3xl border border-primary-60 bg-white px-4 py-3 text-sm font-semibold text-primary-60 hover:bg-primary-20">
+                  개발용 로그인 건너뛰기 →
+                </button>
+                <p className="mt-2 text-center text-xs text-text-secondary">
+                  로컬 미리보기 전용 · EC2 로그인·실제 DB 저장 없이 화면을 둘러볼 수 있어요.
+                </p>
+              </div>
+            )}
 
             {/* Divider */}
             <div className="flex w-full items-center gap-[21px]">

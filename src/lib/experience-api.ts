@@ -1,3 +1,5 @@
+import { previewRequest } from "./dev-preview";
+
 export const TAGS = [
   { code: "STAR", label: "STAR", bg: "bg-primary-20" },
   { code: "GROWTH_VALUES", label: "성장·가치관", bg: "bg-primary-30" },
@@ -36,6 +38,8 @@ export class ApiError extends Error {
 }
 type Envelope<T> = { success: boolean; data: T };
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const preview = previewRequest<T>(path, init);
+  if (preview) return preview;
   let response: Response;
   try {
     response = await fetch("/api/" + path, {

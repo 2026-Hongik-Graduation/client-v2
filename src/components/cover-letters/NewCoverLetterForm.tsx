@@ -1,194 +1,143 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState, type FormEvent } from "react";
+import { coverApi } from "@/lib/cover-letter-api";
 
-const STEPS = ["채용 공고 입력", "기업 분석", "문항 작성", "자소서 작성"];
-
-function Stepper() {
-  return (
-    <div className="flex flex-wrap items-center gap-2">
-      {STEPS.map((label, i) => {
-        const active = i === 0;
-        return (
-          <div key={label} className="flex items-center gap-2">
-            <div className="flex items-center gap-2">
-              {active && (
-                <span className="flex size-4 items-center justify-center overflow-hidden rounded-full bg-primary-60">
-                  <span className="text-center text-[11px] leading-[1.3] tracking-[0.165px] text-text-inverse">
-                    1
-                  </span>
-                </span>
-              )}
-              <span
-                className={`whitespace-nowrap text-[12px] font-semibold leading-[1.35] tracking-[0.12px] ${
-                  active ? "text-primary-60" : "text-text-tertiary"
-                }`}
-              >
-                {label}
-              </span>
-            </div>
-            {i < STEPS.length - 1 && (
-              <span className="block h-px w-[27px] bg-grayscale-40" aria-hidden />
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function Field({ label, placeholder }: { label: string; placeholder: string }) {
-  return (
-    <div className="flex w-full min-w-[320px] flex-1 items-center gap-3">
-      <span className="shrink-0 text-[14px] font-semibold leading-[1.45] tracking-[0.07px] text-text-secondary">
-        {label}
-      </span>
-      <input
-        type="text"
-        placeholder={placeholder}
-        className="h-12 min-w-0 flex-1 rounded-[24px] bg-background-30 px-4 py-3 text-[16px] font-normal leading-[1.6] text-text-primary placeholder:text-text-tertiary focus:outline-none"
-      />
-    </div>
-  );
-}
-
-function DateField() {
-  return (
-    <div className="flex w-full min-w-[320px] flex-1 items-center gap-3">
-      <span className="shrink-0 text-[14px] font-semibold leading-[1.45] tracking-[0.07px] text-text-secondary">
-        마감일
-      </span>
-      <div className="flex h-12 min-w-0 flex-1 items-center justify-between rounded-[24px] bg-background-30 px-4 py-3">
-        <input
-          type="text"
-          placeholder="마감일을 입력해주세요"
-          className="min-w-0 flex-1 bg-transparent text-[16px] font-normal leading-[1.6] text-text-primary placeholder:text-text-tertiary focus:outline-none"
-        />
-        <span className="block size-6 shrink-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/figma/icon-calendar.svg" alt="" className="h-full w-full" />
-        </span>
-      </div>
-    </div>
-  );
-}
-
+const steps = ["채용 공고 입력", "문항 작성", "경험 연결", "자소서 저장"];
 export function NewCoverLetterForm() {
+  const router = useRouter();
   const [tab, setTab] = useState<"link" | "text">("link");
-
+  const [company, setCompany] = useState("");
+  const [position, setPosition] = useState("");
+  const [deadline, setDeadline] = useState("");
+  const [url, setUrl] = useState("");
+  const [jdOriginal, setJdOriginal] = useState("");
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
+  async function save(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (pending) return;
+    setError("");
+    if (!company.trim() || !position.trim()) {
+      setError("기업명과 지원 직무는 필수입니다."); return;
+    }
+    if (company.trim().length > 150 || position.trim().length > 150) {
+      setError("기업명과 직무명은 각각 150자를 넘을 수 없습니다."); return;
+    }
+    if (tab === "link" && url.trim()) {
+      try {
+        const parsed = new URL(url.trim());
+        if (!["http:", "https:"].includes(parsed.protocol) || parsed.username || parsed.password)
+          throw new Error("invalid");
+      } catch { setError("http:// 또는 https:// 형식의 채용공고 링크만 사용할 수 있어요."); return; }
+      if (url.trim().length > 2048) { setError("링크는 2048자를 넘을 수 없습니다."); return; }
+    }
+    if (tab === "text" && jdOriginal.length > 100000) {
+      setError("공고 원문은 100,000자까지만 입력할 수 있습니다."); return;
+    }
+    setPending(true);
+    try {
+      const created = await coverApi.create({
+        companyName: company.trim(), positionName: position.trim(),
+        deadline: deadline || null, jdUrl: tab === "link" ? (url.trim() || null) : null,
+      });
+      let postingFailed = false;
+      if ((tab === "text" && jdOriginal.trim()) || (tab === "link" && url.trim())) {
+        try {
+          await coverApi.savePosting(created.id, {
+            url: tab === "link" ? url.trim() : null,
+            jdOriginal: tab === "text" ? jdOriginal.trim() : null,
+            qualifications: null, preferences: null, hiringProcess: null,
+          });
+        } catch { postingFailed = true; }
+      }
+      router.replace("/cover-letters/" + created.id + (postingFailed ? "?posting=failed" : ""));
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "자소서 생성에 실패했습니다.");
+      setPending(false);
+    }
+  }
+  const field = "min-w-0 w-full rounded-[24px] bg-background-30 px-4 py-3 text-base text-text-primary outline-none focus:ring-2 focus:ring-primary-60";
   return (
-    <main className="flex min-h-[836px] min-w-0 flex-1 flex-col items-end gap-8 self-stretch rounded-[40px] bg-background-10 px-6 py-8 md:px-[60px]">
-      <div className="flex w-full flex-1 flex-col gap-10">
-        {/* Header */}
-        <div className="flex w-full flex-col gap-4">
-          <div className="flex w-full items-end justify-between gap-4">
-            <div className="flex min-w-0 flex-1 flex-col gap-2">
-              <div className="flex items-start gap-3">
-                <Link href="/" className="block size-6 shrink-0" aria-label="뒤로">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/figma/icon-back.svg" alt="" className="h-full w-full" />
-                </Link>
-                <p className="text-[18px] font-bold leading-[1.45] tracking-[-0.09px] text-text-primary">
-                  새 자소서 만들기
-                </p>
-              </div>
-              <p className="text-[16px] font-normal leading-[1.6] text-text-secondary">
-                채용공고를 입력하면, 자소서 작성에 필요한 기업 분석 결과를 확인할 수 있어요.
-              </p>
-            </div>
-            <button
-              type="button"
-              disabled
-              className="flex h-12 shrink-0 cursor-not-allowed items-center justify-center rounded-[24px] bg-background-70 px-6 py-3"
-            >
-              <span className="whitespace-nowrap text-center text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-text-disabled">
-                다음단계로 →
-              </span>
-            </button>
-          </div>
-          <Stepper />
+    <main className="flex min-w-0 flex-1 flex-col gap-8 rounded-[40px] bg-background-10 p-5 md:p-10 xl:px-[60px]">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="flex flex-col gap-2">
+          <Link href="/cover-letters" className="text-sm text-primary-60 underline">← 자소서 목록</Link>
+          <h1 className="text-[28px] font-semibold text-text-primary">새 자소서 만들기</h1>
+          <p className="text-sm text-text-secondary">
+            기업 정보와 채용공고를 먼저 저장하고, 자소서 문항 및 경험을 연결하세요.
+          </p>
         </div>
-
-        {/* Body */}
-        <div className="flex w-full flex-1 flex-col gap-6">
-          {/* Mode tabs */}
-          <div className="flex items-center gap-4">
-            <button
-              type="button"
-              onClick={() => setTab("link")}
-              className={`flex h-12 items-center justify-center rounded-[24px] px-6 py-3 text-[14px] font-medium leading-[1.55] tracking-[0.07px] ${
-                tab === "link"
-                  ? "bg-primary-80 text-text-inverse"
-                  : "bg-background-50 text-text-secondary"
-              }`}
-            >
+        <span className="rounded-3xl bg-primary-20 px-4 py-2 text-xs text-primary-60">1/4 · 기본 정보</span>
+      </div>
+      <div className="flex flex-wrap items-center gap-2" aria-label="작성 단계">
+        {steps.map((step, i) => (
+          <span key={step} className={`rounded-3xl px-3 py-2 text-xs ${i === 0
+            ? "bg-primary-60 text-white" : "bg-background-30 text-text-tertiary"}`}>
+            {i + 1}. {step}
+          </span>
+        ))}
+      </div>
+      <form onSubmit={save} className="flex w-full flex-col gap-7">
+        <section className="grid gap-5 rounded-3xl border border-background-50 bg-background-20 p-5 md:grid-cols-2 md:p-8">
+          <label className="flex flex-col gap-2 text-sm font-semibold">
+            기업명 <span className="text-red-600">*</span>
+            <input required maxLength={150} value={company} onChange={e => setCompany(e.target.value)}
+              placeholder="ex) 토스뱅크" className={field} />
+          </label>
+          <label className="flex flex-col gap-2 text-sm font-semibold">
+            직무명 <span className="text-red-600">*</span>
+            <input required maxLength={150} value={position} onChange={e => setPosition(e.target.value)}
+              placeholder="ex) 백엔드 개발자" className={field} />
+          </label>
+          <label className="flex flex-col gap-2 text-sm font-semibold md:col-span-2">
+            마감일 (선택)
+            <input type="date" value={deadline} onChange={e => setDeadline(e.target.value)} className={field} />
+          </label>
+        </section>
+        <section className="rounded-3xl border border-background-50 bg-background-20 p-5 md:p-8">
+          <h2 className="mb-4 text-lg font-semibold">채용공고 입력 (선택)</h2>
+          <div className="mb-5 flex flex-wrap gap-3">
+            <button type="button" aria-pressed={tab === "link"} onClick={() => setTab("link")}
+              className={`rounded-3xl px-5 py-3 text-sm ${tab === "link" ? "bg-primary-80 text-white" : "bg-background-50 text-text-secondary"}`}>
               링크 붙여넣기
             </button>
-            <button
-              type="button"
-              onClick={() => setTab("text")}
-              className={`flex h-12 items-center justify-center rounded-[24px] px-6 py-3 text-[14px] font-medium leading-[1.55] tracking-[0.07px] ${
-                tab === "text"
-                  ? "bg-primary-80 text-text-inverse"
-                  : "bg-background-50 text-text-secondary"
-              }`}
-            >
+            <button type="button" aria-pressed={tab === "text"} onClick={() => setTab("text")}
+              className={`rounded-3xl px-5 py-3 text-sm ${tab === "text" ? "bg-primary-80 text-white" : "bg-background-50 text-text-secondary"}`}>
               텍스트 붙여넣기
             </button>
           </div>
-
-          {/* Upload card */}
-          <div className="flex w-full flex-col items-center rounded-3xl border border-background-50 bg-background-20 px-6 py-12">
-            <div className="flex w-full flex-col items-center gap-8">
-              <div className="flex w-full flex-col items-center gap-6">
-                <div className="flex w-full flex-col gap-3">
-                  <h2 className="w-full text-center text-[24px] font-semibold leading-[1.35] tracking-[-0.24px] text-text-primary">
-                    {tab === "link" ? "링크 붙여넣기" : "텍스트 붙여넣기"}
-                  </h2>
-                  <p className="w-full text-center text-[16px] font-normal leading-[1.6] text-text-secondary">
-                    {tab === "link"
-                      ? "기업 정보를 입력하고 채용 공고 링크를 붙여넣기 해주세요."
-                      : "기업 정보를 입력하고 채용 공고 내용을 붙여넣기 해주세요."}
-                  </p>
-                </div>
-
-                {/* Company info fields */}
-                <div className="flex w-full flex-wrap content-center items-center gap-3 rounded-3xl border border-background-50 bg-background-20 px-6 py-12">
-                  <Field label="기업명" placeholder="ex) 토스뱅크" />
-                  <Field label="직무명" placeholder="ex) 백엔드 개발자" />
-                  <DateField />
-                </div>
-
-                {/* Link / text input */}
-                {tab === "link" ? (
-                  <div className="flex h-[72px] w-full items-center gap-3 rounded-full bg-background-40 px-6 py-3">
-                    <input
-                      type="text"
-                      placeholder="링크를 붙여 넣으세요"
-                      className="h-[42px] min-w-0 flex-1 bg-transparent text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-text-primary placeholder:text-text-tertiary focus:outline-none"
-                    />
-                    <button
-                      type="button"
-                      className="flex h-12 w-[90px] shrink-0 items-center justify-center rounded-[24px] bg-primary-80 px-4 py-3"
-                    >
-                      <span className="whitespace-nowrap text-center text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-text-inverse">
-                        입력 →
-                      </span>
-                    </button>
-                  </div>
-                ) : (
-                  <textarea
-                    rows={5}
-                    placeholder="채용 공고 내용을 붙여 넣으세요"
-                    className="w-full resize-none rounded-3xl bg-background-40 px-6 py-4 text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-text-primary placeholder:text-text-tertiary focus:outline-none"
-                  />
-                )}
-              </div>
-            </div>
-          </div>
+          {tab === "link" ? (
+            <label className="flex flex-col gap-2 text-sm font-semibold">
+              채용공고 URL
+              <input type="url" value={url} onChange={e => setUrl(e.target.value)} maxLength={2048}
+                placeholder="https://example.com/jobs/123" className={field} />
+            </label>
+          ) : (
+            <label className="flex flex-col gap-2 text-sm font-semibold">
+              채용공고 원문
+              <textarea rows={9} maxLength={100000} value={jdOriginal}
+                onChange={e => setJdOriginal(e.target.value)}
+                placeholder="채용공고의 주요 업무, 자격요건 등을 붙여 넣으세요."
+                className={field} />
+              <span className="text-right text-xs font-normal text-text-tertiary">{jdOriginal.length}/100000자</span>
+            </label>
+          )}
+          <p className="mt-4 text-xs text-text-secondary">
+            지금은 원문만 저장합니다. 기업 분석과 AI 초안 생성은 후속 단계에서 연결합니다.
+          </p>
+        </section>
+        {error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+        <div className="flex justify-end">
+          <button type="submit" disabled={pending}
+            className="rounded-3xl bg-background-100 px-7 py-3 text-sm text-white disabled:opacity-50">
+            {pending ? "저장 중..." : "저장하고 문항 작성하기 →"}
+          </button>
         </div>
-      </div>
+      </form>
     </main>
   );
 }

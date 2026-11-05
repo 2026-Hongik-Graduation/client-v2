@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { isPreviewMode, stopPreviewMode } from "@/lib/dev-preview";
 import { useState } from "react";
 
 export function LogoutButton() {
@@ -9,6 +10,12 @@ export function LogoutButton() {
   async function logout() {
     if (pending) return;
     setPending(true);
+    if (isPreviewMode()) {
+      stopPreviewMode();
+      router.replace("/login");
+      router.refresh();
+      return;
+    }
     try {
       const response = await fetch("/api/auth/logout", { method: "POST" });
       if (!response.ok) throw new Error("logout");

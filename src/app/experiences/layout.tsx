@@ -5,7 +5,8 @@ import { redirect } from "next/navigation";
 async function Authenticated({ children }: { children: React.ReactNode }) {
   const store = await cookies();
   // The Spring API validates actual ownership and authorization on each request.
-  if (!store.has("pofit_qa_access") && !store.has("pofit_qa_refresh")) {
+  const preview = process.env.NODE_ENV === "development" && store.get("pofit_dev_preview")?.value === "1";
+  if (!preview && !store.has("pofit_qa_access") && !store.has("pofit_qa_refresh")) {
     redirect("/login?next=/experiences");
   }
   return children;

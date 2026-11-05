@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LogoutButton } from "./LogoutButton";
+import { PreviewBadge } from "./PreviewBadge";
 
 type NavItem = {
   label: string;
@@ -9,7 +10,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "경험", step: 1, href: "/experiences" },
-  { label: "자소서", step: 2, href: "/cover-letters/new" },
+  { label: "자소서", step: 2, href: "/cover-letters" },
   { label: "지원", step: 3, href: "/applications" },
   { label: "면접", step: 4, href: "#" },
 ];
@@ -60,6 +61,7 @@ export function Lnb({ active = "경험" }: { active?: string }) {
       </div>
 
       <div className="flex flex-col items-center gap-2">
+        <PreviewBadge />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/figma/lnb-profile.svg" alt="" className="size-9" />
         <LogoutButton />

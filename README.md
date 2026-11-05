@@ -4,7 +4,7 @@
 >
 > 이 문서는 **현재 저장소에 실제 있는 구현**과 **Figma를 기준으로 앞으로 구현할 계획**을 구분하는 개발 로드맵입니다.
 
-> **2026-11-05 로컬 기능 브랜치:** `feat/auth-experience-journey-20261105`에서 EC2 QA 연결, 이메일 가입·프로필, 로그인, 경험 기본 CRUD를 구현했습니다. 현재 `main` 기준 로드맵과 상태가 다를 수 있습니다. 연결·테스트 범위는 **[EC2-CLIENT-INTEGRATION.md](./docs/EC2-CLIENT-INTEGRATION.md)**를 확인하세요. 운영 계정으로 CRUD 통합 테스트를 완료했다는 의미는 아닙니다.
+> **2026-11-05 로컬 기능 브랜치:** `feat/auth-experience-journey-20261105`에서 EC2 QA 연결, 이메일 가입·프로필, 로그인, 경험 기본 CRUD를 구현했고, 후속 `feat/cover-letter-p0-20261105`에서 자소서 목록·문항 CRUD·경험 연결·버전 관리 및 개발용 로그인 패스(브라우저 미리보기)를 추가했습니다. 현재 `main` 기준 로드맵과 상태가 다를 수 있습니다. 연결 설명은 [EC2-CLIENT-INTEGRATION.md](./docs/EC2-CLIENT-INTEGRATION.md), 자소서 구현 범위와 개발 모드는 [COVER-LETTER-P0.md](./docs/COVER-LETTER-P0.md)를 확인하세요. **실제 EC2 CRUD 통합 QA는 후속 단계**입니다.
 >
 - **원격 저장소:** https://github.com/2026-Hongik-Graduation/client-v2
 - **Figma 디자인:** https://www.figma.com/design/0wZM1igoWTo0vJt4Ncqpgl/Pofit-%ED%8F%AC%ED%95%8F?node-id=0-1
