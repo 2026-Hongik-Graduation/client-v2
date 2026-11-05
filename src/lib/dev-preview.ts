@@ -28,9 +28,16 @@ type Posting = { id: string; coverLetterId: string; url: string | null; jdOrigin
   qualifications: string | null; preferences: string | null; hiringProcess: string | null };
 type Version = { id: string; coverLetterId: string; label: string; createdAt: string; snapshotJson: string };
 type Link = { id: string; questionId: string; experienceId: string; displayOrder: number };
+type ApplicationDetails = {
+  coverLetterId: string; deadline: string | null; interviewDate: string | null;
+  documentResult: "PENDING" | "PASSED" | "FAILED" | null;
+  hasResume: boolean; hasPortfolio: boolean;
+};
 type Store = { covers: Cover[]; questions: Record<string, Question[]>; versions: Record<string, Version[]>;
-  postings: Record<string, Posting>; links: Record<string, Link[]>; experiences: Experience[]; answers: Record<string, ExpAnswer[]> };
-const fresh = (): Store => ({ covers: [], questions: {}, versions: {}, postings: {}, links: {}, experiences: [], answers: {} });
+  postings: Record<string, Posting>; links: Record<string, Link[]>; experiences: Experience[];
+  answers: Record<string, ExpAnswer[]>; applicationDetails: Record<string, ApplicationDetails> };
+const fresh = (): Store => ({ covers: [], questions: {}, versions: {}, postings: {}, links: {}, experiences: [],
+  answers: {}, applicationDetails: {} });
 const load = (): Store => {
   try { return { ...fresh(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") }; }
   catch { return fresh(); }
@@ -116,6 +123,23 @@ function handler(path: string, init: RequestInit = {}): unknown {
     }
     return bad();
   }
+  if (section === "application-board") {
+    const stages = ["PLANNED", "PREPARING", "SUBMITTED", "CLOSED"];
+    if (!id && method === "GET") {
+      const columns = Object.fromEntries(stages.map(stage => [stage, store.covers
+        .filter(cover => (cover.applicationStatus || "PLANNED") === stage)
+        .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))]));
+      return { stages, columns };
+    }
+    if (id && child === "status" && method === "PATCH") {
+      if (!stages.includes(String(data.status))) throw new Error("지원 단계가 올바르지 않습니다.");
+      const cover = requireFound(store.covers.find(c => c.id === id), "지원 카드");
+      cover.applicationStatus = String(data.status);
+      cover.updatedAt = now();
+      return done(cover);
+    }
+    return bad();
+  }
   if (section !== "cover-letters") return bad();
   if (!id && method === "GET") {
     const keyword = url.searchParams.get("keyword") || "";
@@ -139,7 +163,30 @@ function handler(path: string, init: RequestInit = {}): unknown {
   if (!child && method === "DELETE") {
     store.covers = store.covers.filter(c => c.id !== id);
     delete store.questions[id]; delete store.versions[id]; delete store.postings[id];
+    delete store.applicationDetails[id];
     return done({ deleted: true });
+  }
+  if (child === "application-detail") {
+    if (method === "GET") return store.applicationDetails[id] || {
+      coverLetterId: id, deadline: cover.deadline, interviewDate: null,
+      documentResult: null, hasResume: false, hasPortfolio: false,
+    };
+    if (method === "PUT") {
+      const result = data.documentResult;
+      if (result != null && !["PENDING", "PASSED", "FAILED"].includes(String(result)))
+        throw new Error("서류 결과를 확인해 주세요.");
+      cover.deadline = data.deadline ? String(data.deadline) : null;
+      cover.updatedAt = now();
+      const detail: ApplicationDetails = {
+        coverLetterId: id, deadline: cover.deadline,
+        interviewDate: data.interviewDate ? String(data.interviewDate) : null,
+        documentResult: result == null ? null : String(result) as ApplicationDetails["documentResult"],
+        hasResume: data.hasResume === true, hasPortfolio: data.hasPortfolio === true,
+      };
+      store.applicationDetails[id] = detail;
+      return done(detail);
+    }
+    return bad();
   }
   if (child === "posting") {
     if (method === "GET") return requireFound(store.postings[id], "채용공고");

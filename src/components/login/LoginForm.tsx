@@ -38,7 +38,7 @@ export function LoginForm() {
       stopPreviewMode();
       const requested = new URLSearchParams(window.location.search).get("next");
       const safeNext = requested &&
-        /^\/(?:(?:experiences|cover-letters)(?:\/[a-zA-Z0-9-]+)?|onboarding)$/.test(requested)
+        /^\/(?:(?:experiences|cover-letters)(?:\/[a-zA-Z0-9-]+)?|applications|onboarding)$/.test(requested)
         ? requested : "/experiences";
       try {
         const profileRes = await fetch("/api/members/me/profile", { cache: "no-store" });

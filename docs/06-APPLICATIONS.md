@@ -1,6 +1,6 @@
 # 06. 지원 현황 관리(칸반 보드) 구현 계획
 
-상태: **부분 구현**. `/applications`의 칸반 화면과 카드/통계/검색 입력 UI가 존재하지만 실제 카드·컬럼 CRUD/DnD·검색 기능은 미구현입니다.
+상태: **P0 사용자 흐름 구현 (2026-11-05 로컬 브랜치 `feat/applications-board-20261105`)**. `/applications`의 서버 기반 지원 보드·카드 추가·수정·삭제·단계 이동·일정 달력·검색이 구현되었습니다. **백엔드 미지원 컬럼 CRUD/사용자 정렬과 실제 EC2 통합 QA는 미완료**입니다. [현재 구현·제약 문서](./APPLICATIONS-P0.md)를 우선 참고하세요. 아래 계획은 초기(2026-11-01) 시점을 기준으로 작성되었습니다.
 
 ### 원격 최신 코드 현황 (2026-11-01, `2a127df`)
 - `src/app/applications/page.tsx` + `src/components/applications/ApplicationsBoard.tsx`: LNB, 통계, 배너, 검색 입력창, 칸반 컬럼/카드 렌더링.

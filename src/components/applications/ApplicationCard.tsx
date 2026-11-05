@@ -1,108 +1,60 @@
-export type StatusVariant =
-  | "pending" // 미제출
-  | "submitted" // 제출 완료
-  | "pass" // 합격
-  | "waiting" // 발표 대기
-  | "fail"; // 불합격
+"use client";
+import type { DragEvent } from "react";
+import type { CoverLetter } from "@/lib/cover-letter-api";
+import { STAGES, type Stage } from "@/lib/application-api";
 
-const STATUS_STYLE: Record<StatusVariant, string> = {
-  pending: "bg-background-40 text-text-secondary",
-  submitted: "bg-primary-20 text-status-success",
-  pass: "bg-primary-20 text-status-success",
-  waiting: "bg-background-70 text-text-inverse",
-  fail: "bg-[rgba(239,68,68,0.2)] text-status-error",
-};
-
-export type Application = {
-  role: string;
-  company: string;
-  /** number of filled segments out of 4; omit to hide the progress block */
-  progress?: number;
-  status: StatusVariant;
-  statusLabel: string;
-  meta: string;
-  metaColor?: "error" | "muted";
-  highlighted?: boolean;
-};
-
-function CompanyLogo() {
-  return (
-    <div
-      className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-[12px]"
-      style={{
-        backgroundImage:
-          "linear-gradient(-23.66deg, var(--color-background-40) 15.38%, var(--color-background-10) 81.24%)",
-      }}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/figma/card-company-logo.png" alt="" className="size-7 object-contain" />
-    </div>
-  );
+function daysLeft(deadline: string | null): number | null {
+  if (!deadline) return null;
+  const [y, m, d] = deadline.split("-").map(Number);
+  if (!y || !m || !d) return null;
+  const now = new Date();
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((Date.UTC(y, m - 1, d) - today) / 86400000);
 }
-
-function Progress({ filled }: { filled: number }) {
+const COVER_STATE: Record<string, string> = {
+  DRAFT: "자소서 초안", IN_PROGRESS: "자소서 작성 중", COMPLETED: "자소서 작성 완료",
+};
+export function ApplicationCard({
+  app, moving, onOpen, onMove, onDragStart,
+}: {
+  app: CoverLetter; moving: boolean;
+  onOpen: (id: string) => void; onMove: (id: string, stage: Stage) => void;
+  onDragStart: (event: DragEvent<HTMLElement>, id: string) => void;
+}) {
+  const day = daysLeft(app.deadline);
+  const urgent = day !== null && day >= 0 && day <= 3 && app.applicationStatus !== "CLOSED";
+  const stage = STAGES.find(item => item.code === app.applicationStatus) || STAGES[0];
+  const label = day === null ? "마감일 미지정"
+    : day === 0 ? "D-Day" : day > 0 ? "D-" + day : "마감일 경과";
   return (
-    <div className="flex w-full flex-col gap-3 rounded-2xl border border-background-40 p-3">
-      <div className="flex h-[9px] w-full items-center gap-1">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div
-            key={i}
-            className={`h-[9px] min-w-0 flex-1 rounded-full ${
-              i < filled ? "bg-primary-50" : "bg-primary-20"
-            }`}
-          />
-        ))}
-      </div>
-      <div className="flex w-full items-center gap-[9px] text-[14px] tracking-[0.07px] text-text-secondary">
-        <span className="whitespace-nowrap">
-          문항 <span className="font-semibold">{filled * 25}%</span>
+    <article draggable={!moving} onDragStart={event => onDragStart(event, app.id)}
+      className="flex min-w-0 w-full cursor-grab flex-col gap-3 rounded-2xl border border-background-50 bg-background-10 p-4 transition hover:border-primary-60 hover:shadow-sm active:cursor-grabbing"
+      aria-label={app.companyName + " " + app.positionName + " 지원 카드"}>
+      <button type="button" onClick={() => onOpen(app.id)}
+        className="flex w-full items-center gap-4 text-left focus-visible:outline-2 focus-visible:outline-primary-60">
+        <span className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-bl from-background-40 to-background-10 text-xl font-semibold text-primary-60">
+          {app.companyName.trim().charAt(0) || "P"}
         </span>
-        <span className="flex-1 text-right font-normal leading-[1.55]">작성 완료</span>
+        <span className="min-w-0 flex-1">
+          <span className="block break-words text-sm font-semibold text-text-primary">{app.positionName}</span>
+          <span className="mt-1 block break-words text-xs text-text-secondary">{app.companyName}</span>
+        </span>
+      </button>
+      <div className="flex items-center justify-between gap-1">
+        <span className="rounded-full bg-primary-20 px-3 py-1 text-xs font-medium text-primary-60">
+          {COVER_STATE[app.status] || "자소서"}
+        </span>
+        <span className={`text-right text-xs ${urgent ? "font-semibold text-status-error" : "text-primary-70"}`}>
+          {label}
+        </span>
       </div>
-    </div>
-  );
-}
-
-export function ApplicationCard({ app }: { app: Application }) {
-  return (
-    <div
-      className={`flex w-full flex-col items-start rounded-2xl bg-background-10 p-4 ${
-        app.highlighted
-          ? "border-[0.8px] border-primary-60"
-          : "border-[0.8px] border-background-50"
-      }`}
-    >
-      <div className="flex w-full flex-col gap-2">
-        <div className="flex w-full flex-col gap-2">
-          <div className="flex w-full items-center gap-4">
-            <CompanyLogo />
-            <div className="flex min-w-0 flex-1 flex-col justify-center gap-0.5">
-              <p className="w-full text-[14px] font-semibold leading-[1.45] tracking-[0.07px] text-text-primary">
-                {app.role}
-              </p>
-              <p className="w-full text-[12px] font-normal leading-[1.5] tracking-[0.12px] text-text-secondary">
-                {app.company}
-              </p>
-            </div>
-          </div>
-          {app.progress !== undefined && <Progress filled={app.progress} />}
-        </div>
-
-        <div className="flex w-full items-center justify-between">
-          <span
-            className={`flex items-center justify-center rounded-[24px] px-3 py-1 text-[14px] font-medium leading-[1.55] tracking-[0.07px] ${STATUS_STYLE[app.status]}`}
-          >
-            {app.statusLabel}
-          </span>
-          <span
-            className={`text-right text-[12px] font-normal leading-[1.5] tracking-[0.12px] ${
-              app.metaColor === "error" ? "text-status-error" : "text-primary-70"
-            }`}
-          >
-            {app.meta}
-          </span>
-        </div>
-      </div>
-    </div>
+      <label className="flex flex-col gap-1 text-xs text-text-secondary">
+        지원 단계 이동
+        <select value={stage.code} disabled={moving} onChange={e => onMove(app.id, e.target.value as Stage)}
+          className="w-full rounded-xl border border-background-50 bg-background-20 p-2 text-xs text-text-primary focus-visible:outline-2 focus-visible:outline-primary-60 disabled:opacity-40">
+          {STAGES.map(item => <option key={item.code} value={item.code}>{item.label}</option>)}
+        </select>
+      </label>
+    </article>
   );
 }
