@@ -4,7 +4,7 @@
 >
 > 이 문서는 **현재 저장소에 실제 있는 구현**과 **Figma를 기준으로 앞으로 구현할 계획**을 구분하는 개발 로드맵입니다.
 
-> **2026-11-05 로컬 기능 브랜치:** `feat/auth-experience-journey-20261105`에서 EC2 QA 연결, 이메일 가입·프로필, 로그인, 경험 기본 CRUD를 구현했고, 후속 `feat/cover-letter-p0-20261105`에서 자소서 목록·문항 CRUD·경험 연결·버전 관리 및 개발용 로그인 패스(브라우저 미리보기), `feat/applications-board-20261105`에서 지원현황 칸반·단계 이동·지원 상세·마감 캘린더를 추가했습니다. 현재 `main` 기준 로드맵과 상태가 다를 수 있습니다. 연결 설명은 [EC2-CLIENT-INTEGRATION.md](./docs/EC2-CLIENT-INTEGRATION.md), 자소서 구현 범위와 개발 모드는 [COVER-LETTER-P0.md](./docs/COVER-LETTER-P0.md), 지원현황 구현은 [APPLICATIONS-P0.md](./docs/APPLICATIONS-P0.md)를 확인하세요. **실제 EC2 CRUD 통합 QA는 후속 단계**입니다.
+> **2026-11-05 로컬 기능 브랜치:** `feat/auth-experience-journey-20261105`에서 EC2 QA 연결, 이메일 가입·프로필, 로그인, 경험 기본 CRUD를 구현했고, 후속 `feat/cover-letter-p0-20261105`에서 자소서 목록·문항 CRUD·경험 연결·버전 관리 및 개발용 로그인 패스(브라우저 미리보기), `feat/applications-board-20261105`에서 지원현황 칸반·단계 이동·지원 상세·마감 캘린더, `feat/interview-preparation-20261105`에서 면접 질문 연습·타이머·브라우저 저장·TXT 내보내기를 추가했습니다. 현재 `main` 기준 로드맵과 상태가 다를 수 있습니다. 연결 설명은 [EC2-CLIENT-INTEGRATION.md](./docs/EC2-CLIENT-INTEGRATION.md), 자소서 구현 범위와 개발 모드는 [COVER-LETTER-P0.md](./docs/COVER-LETTER-P0.md), 지원현황 구현은 [APPLICATIONS-P0.md](./docs/APPLICATIONS-P0.md), 면접 준비 구현·데이터 보관 제한은 [INTERVIEWS-P0.md](./docs/INTERVIEWS-P0.md)를 확인하세요. **실제 EC2 CRUD 통합 QA는 후속 단계**입니다.
 >
 - **원격 저장소:** https://github.com/2026-Hongik-Graduation/client-v2
 - **Figma 디자인:** https://www.figma.com/design/0wZM1igoWTo0vJt4Ncqpgl/Pofit-%ED%8F%AC%ED%95%8F?node-id=0-1
@@ -25,6 +25,7 @@
 | 경험 정리·STAR·AI·가져오기 | [04-EXPERIENCES.md](./docs/04-EXPERIENCES.md) | 미구현 |
 | 자기소개서·문항·첨삭·버전 | [05-COVER-LETTERS.md](./docs/05-COVER-LETTERS.md) | 미구현 |
 | 지원 현황 칸반 | [06-APPLICATIONS.md](./docs/06-APPLICATIONS.md) | 미구현 |
+| 면접 준비(로컬 연습) | [INTERVIEWS-P0.md](./docs/INTERVIEWS-P0.md) | 기능 구현 / AI 서버 연동·전용 Figma QA 미완료 |
 | API·보안·통합 QA·배포 | [07-INTEGRATION-QA.md](./docs/07-INTEGRATION-QA.md) | 계획 |
 
 **디자인 이미지:** [Figma 미리보기 PNG 7장과 원본 노드 매핑](./docs/figma-previews/README.md).
@@ -121,6 +122,8 @@ Figma의 **디자인페이지**에는 데스크톱(1440)과 컴팩트(1023~720) 
 | `/cover-letters/new` | 새 자소서 | 채용공고 URL·직무·문항 입력 |
 | `/cover-letters/[id]` | 자소서 편집 | 경험 연결·AI 첨삭·버전·출력 |
 | `/applications` | 지원 현황 관리 | 칸반·지원 카드 |
+| `/interviews` | 면접 준비 회사 선택 | 실제 자소서 목록 기반, AI 미연동 |
+| `/interviews/[id]` | 면접 답변 연습 | 브라우저 저장·TXT 내보내기, 서버 영속화 미지원 |
 
 모달/토스트/필터/유효성 검증 상태는 기본적으로 기존 URL 내 상태로 관리합니다. 인증이 필요한 영역은 실제 인증 도입 후 접근 제어합니다.
 

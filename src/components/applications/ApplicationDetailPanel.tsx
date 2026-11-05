@@ -141,6 +141,15 @@ export function ApplicationDetailPanel({
           </form>
         )}
         <div className="mt-8 flex flex-col gap-3 border-t border-background-50 pt-6">
+          <Link href={"/interviews/" + cover.id}
+            onClick={e => {
+              if (dirty && !window.confirm("저장되지 않은 지원 상세 정보가 있습니다. 면접 준비로 이동할까요?")) {
+                e.preventDefault();
+              }
+            }}
+            className="rounded-3xl bg-primary-60 px-5 py-3 text-center text-sm font-semibold text-white">
+            이 회사 면접 연습하기 →
+          </Link>
           <Link href={"/cover-letters/" + cover.id}
             onClick={e => {
               if (dirty && !window.confirm("저장되지 않은 지원 상세 정보가 있습니다. 자소서 편집으로 이동할까요?")) {

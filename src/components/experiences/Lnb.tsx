@@ -12,7 +12,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "경험", step: 1, href: "/experiences" },
   { label: "자소서", step: 2, href: "/cover-letters" },
   { label: "지원", step: 3, href: "/applications" },
-  { label: "면접", step: 4, href: "#" },
+  { label: "면접", step: 4, href: "/interviews" },
 ];
 
 export function Lnb({ active = "경험" }: { active?: string }) {

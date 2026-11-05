@@ -274,8 +274,16 @@ export function CoverLetterEditor({ id }: { id: string }) {
           <h1 className="text-[26px] font-semibold">자소서 문항 편집</h1>
           <p className="mt-2 text-sm text-text-secondary">{cover.positionName} · {questions.length}개 문항</p>
         </div>
-        <button type="button" onClick={back}
-          className="rounded-3xl border border-background-50 px-5 py-3 text-sm">← 자소서 목록</button>
+        <div className="flex flex-wrap gap-2">
+          <Link href={"/interviews/" + id}
+            onClick={event => {
+              if (unsaved && !window.confirm("저장하지 않은 자소서 내용이 있습니다. 면접 연습으로 이동할까요?"))
+                event.preventDefault();
+            }}
+            className="rounded-3xl bg-primary-60 px-5 py-3 text-sm text-white">면접 연습하기 →</Link>
+          <button type="button" onClick={back}
+            className="rounded-3xl border border-background-50 px-5 py-3 text-sm">← 자소서 목록</button>
+        </div>
       </header>
       {unsaved && <p role="status" className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
         저장하지 않은 변경사항이 있습니다. 각 영역의 저장 버튼을 눌러 주세요.

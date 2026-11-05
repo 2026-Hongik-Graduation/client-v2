@@ -4,7 +4,7 @@ const NAV_ITEMS: { label: string; href: string }[] = [
   { label: "경험정리", href: "/experiences" },
   { label: "자소서 관리", href: "/cover-letters" },
   { label: "지원현황", href: "/applications" },
-  { label: "면접", href: "#" },
+  { label: "면접", href: "/interviews" },
 ];
 
 export function Header() {
