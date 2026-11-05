@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { ApiError, experienceApi, TAGS as API_TAGS } from "@/lib/experience-api";
 
 const TAGS = [
   { title: "STAR", sub: "순서대로 정리" },
@@ -46,7 +48,38 @@ function StepBadge({ n, label }: { n: number; label: string }) {
 
 export function NewExperienceForm() {
   const [tag, setTag] = useState(0);
-  const [method, setMethod] = useState(0);
+  const [method, setMethod] = useState(1);
+  const [title, setTitle] = useState("");
+  const [startedAt, setStartedAt] = useState("");
+  const [endedAt, setEndedAt] = useState("");
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
+  async function next() {
+    if (pending) return;
+    setError("");
+    if (!title.trim()) { setError("경험 제목을 입력해 주세요."); return; }
+    if (title.trim().length > 150) { setError("제목은 150자 이하여야 합니다."); return; }
+    if (startedAt && endedAt && endedAt < startedAt) {
+      setError("종료일은 시작일보다 빠를 수 없습니다."); return;
+    }
+    if (method !== 1) {
+      setError("AI 대화형과 가져오기는 준비 중입니다. '빠르게 작성하기'를 선택해 주세요.");
+      return;
+    }
+    setPending(true);
+    try {
+      const experience = await experienceApi.create({
+        title: title.trim(), tagCode: API_TAGS[tag].code, creationMethod: "QUICK",
+        startedAt: startedAt || null, endedAt: endedAt || null,
+      });
+      router.push("/experiences/" + experience.id);
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) router.replace("/login?next=/experiences/new");
+      else setError(err instanceof Error ? err.message : "경험 생성에 실패했습니다.");
+      setPending(false);
+    }
+  }
 
   return (
     <main className="flex min-w-0 flex-1 flex-col items-end gap-8 self-stretch rounded-[40px] bg-background-10 px-6 py-8 md:px-[60px]">
@@ -63,14 +96,17 @@ export function NewExperienceForm() {
           </div>
           <button
             type="button"
-            className="flex h-12 shrink-0 items-center justify-center rounded-[24px] bg-background-100 px-6 py-3"
+            onClick={next}
+            disabled={pending}
+            className="flex h-12 shrink-0 items-center justify-center rounded-[24px] bg-background-100 px-6 py-3 disabled:opacity-50"
           >
             <span className="whitespace-nowrap text-center text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-text-inverse">
-              다음단계로 →
+              {pending ? "저장 중..." : "다음단계로 →"}
             </span>
           </button>
         </div>
 
+        {error && <p role="alert" className="w-full rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
         <div className="flex w-full flex-col items-start gap-10">
           {/* Step 1 */}
           <div className="flex w-full flex-col items-start gap-3">
@@ -86,6 +122,10 @@ export function NewExperienceForm() {
                     </label>
                     <input
                       type="text"
+                      maxLength={150}
+                      required
+                      value={title}
+                      onChange={(event) => setTitle(event.target.value)}
                       placeholder="경험 제목을 입력해주세요."
                       className="h-12 w-full rounded-[24px] bg-background-30 px-4 py-3 text-[16px] font-normal leading-[1.6] text-text-primary placeholder:text-text-tertiary focus:outline-none"
                     />
@@ -95,11 +135,13 @@ export function NewExperienceForm() {
                       기간
                     </label>
                     <div className="flex h-12 w-full items-center justify-between rounded-[24px] bg-background-30 px-4 py-3">
-                      <input
-                        type="text"
-                        placeholder="날짜를 입력해주세요."
-                        className="min-w-0 flex-1 bg-transparent text-[16px] font-normal leading-[1.6] text-text-primary placeholder:text-text-tertiary focus:outline-none"
-                      />
+                      <input type="date" aria-label="경험 시작일" value={startedAt}
+                        onChange={(event) => setStartedAt(event.target.value)}
+                        className="min-w-0 w-1/2 flex-1 bg-transparent text-sm text-text-primary focus:outline-none" />
+                      <span className="px-1 text-sm text-text-secondary">~</span>
+                      <input type="date" aria-label="경험 종료일" value={endedAt}
+                        onChange={(event) => setEndedAt(event.target.value)}
+                        className="min-w-0 w-1/2 flex-1 bg-transparent text-sm text-text-primary focus:outline-none" />
                       <span className="block size-6 shrink-0">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src="/figma/icon-calendar.svg" alt="" className="h-full w-full" />
@@ -127,6 +169,7 @@ export function NewExperienceForm() {
                         key={t.title}
                         type="button"
                         onClick={() => setTag(i)}
+                        aria-pressed={active}
                         className={`flex h-[88px] w-[160px] flex-col items-start rounded-2xl px-6 py-4 text-left drop-shadow-[0px_0px_15px_rgba(15,51,47,0.15)] transition-colors ${
                           active
                             ? "border-transparent"
@@ -220,6 +263,7 @@ export function NewExperienceForm() {
                     <button
                       type="button"
                       onClick={() => setMethod(i)}
+                      aria-pressed={active}
                       className={`flex h-12 items-center justify-center rounded-[24px] px-4 py-3 ${
                         active ? "bg-primary-60" : "bg-primary-20"
                       }`}

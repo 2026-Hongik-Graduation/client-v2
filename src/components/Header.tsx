@@ -37,7 +37,7 @@ export function Header() {
         {/* Right: auth pills */}
         <div className="flex items-center gap-4">
           <Link
-            href="/login"
+            href="/signup"
             className="flex flex-col items-center justify-center rounded-[24px] bg-primary-20 px-3 py-1 transition-opacity hover:opacity-90"
           >
             <span className="whitespace-nowrap text-center text-[14px] font-medium tracking-[0.07px] text-status-success">

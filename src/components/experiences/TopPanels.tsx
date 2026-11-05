@@ -1,4 +1,6 @@
 import Link from "next/link";
+import type { ExperienceRecord } from "@/lib/experience-api";
+import { tagInfo } from "@/lib/experience-api";
 
 const CATEGORY_BARS = [
   { label: "STAR", fill: "bg-primary-30", value: "16%" },
@@ -63,7 +65,7 @@ function AddExperiencePanel() {
   );
 }
 
-function CategoryDistribution() {
+function CategoryDistribution({ experiences }: { experiences: ExperienceRecord[] }) {
   return (
     <div className="flex h-[304px] min-w-[457px] flex-1 flex-col items-start gap-4 rounded-3xl border-[0.8px] border-white/80 bg-white/70 p-8 shadow-[0px_0px_30px_0px_rgba(15,51,47,0.15)]">
       <div className="flex w-full flex-col items-start gap-2">
@@ -71,12 +73,15 @@ function CategoryDistribution() {
           경험 카테고리 분포
         </p>
         <p className="w-full text-[12px] font-normal leading-[1.5] tracking-[0.12px] text-text-secondary">
-          지금까지 쌓은 24개의 경험이 이렇게 나뉘어 있어요
+          지금까지 쌓은 {experiences.length}개의 경험이 이렇게 나뉘어 있어요
         </p>
       </div>
 
       <div className="flex w-full flex-1 flex-col items-start gap-2">
-        {CATEGORY_BARS.map((bar) => (
+        {CATEGORY_BARS.map((bar) => {
+          const count = experiences.filter(e => tagInfo(e.tagCode).label === bar.label).length;
+          const percent = experiences.length ? Math.round(count / experiences.length * 100) : 0;
+          return (
           <div key={bar.label} className="flex w-full items-center gap-6">
             <div className="flex w-16 shrink-0 items-center p-1">
               <span className="whitespace-nowrap text-[11px] font-normal leading-[1.3] tracking-[0.165px] text-text-secondary">
@@ -85,24 +90,24 @@ function CategoryDistribution() {
             </div>
             <div className="flex min-w-0 flex-1 items-center gap-[14px]">
               <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-[100px] bg-background-30">
-                <div className={`h-2 rounded-[100px] ${bar.fill}`} style={{ width: "37%" }} />
+                <div className={`h-2 rounded-[100px] ${bar.fill}`} style={{ width: percent + "%" }} />
               </div>
               <span className="whitespace-nowrap text-right text-[12px] font-bold leading-[16.8px] text-text-primary">
-                {bar.value}
+                {percent}%
               </span>
             </div>
           </div>
-        ))}
+        )})}
       </div>
     </div>
   );
 }
 
-export function TopPanels() {
+export function TopPanels({ experiences }: { experiences: ExperienceRecord[] }) {
   return (
     <div className="flex w-full flex-wrap content-center items-center justify-center gap-8">
       <AddExperiencePanel />
-      <CategoryDistribution />
+      <CategoryDistribution experiences={experiences} />
     </div>
   );
 }

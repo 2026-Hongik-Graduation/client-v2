@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LogoutButton } from "./LogoutButton";
 
 type NavItem = {
   label: string;
@@ -58,11 +59,11 @@ export function Lnb({ active = "경험" }: { active?: string }) {
         })}
       </div>
 
-      {/* Profile */}
-      <button type="button" className="size-9 shrink-0" aria-label="내 프로필">
+      <div className="flex flex-col items-center gap-2">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/figma/lnb-profile.svg" alt="" className="h-full w-full" />
-      </button>
+        <img src="/figma/lnb-profile.svg" alt="" className="size-9" />
+        <LogoutButton />
+      </div>
     </nav>
   );
 }

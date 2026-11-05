@@ -24,11 +24,25 @@ export function LoginForm() {
           "x-pofit-keep-login": keepLogin ? "1" : "0" },
         body: JSON.stringify({ email, password }),
       });
-      if (!res.ok) throw new Error("Login failed");
-      router.replace("/experiences");
+      if (!res.ok) throw new Error(res.status === 401
+        ? "이메일 또는 비밀번호를 확인해 주세요."
+        : res.status >= 500 ? "백엔드 연결을 확인해 주세요." : "로그인 요청을 확인해 주세요.");
+      const requested = new URLSearchParams(window.location.search).get("next");
+      const safeNext = requested && /^\/(?:experiences(?:\/[a-zA-Z0-9-]+)?|onboarding)$/.test(requested)
+        ? requested : "/experiences";
+      try {
+        const profileRes = await fetch("/api/members/me/profile", { cache: "no-store" });
+        if (profileRes.ok) {
+          const profile = await profileRes.json();
+          if (profile?.data?.onboardingStep !== "COMPLETED") {
+            router.replace("/onboarding"); router.refresh(); return;
+          }
+        }
+      } catch { /* Leave profile errors to the onboarding screen. */ }
+      router.replace(safeNext);
       router.refresh();
-    } catch {
-      setError("로그인에 실패했습니다. 이메일과 비밀번호 또는 서버 연결을 확인해 주세요.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "로그인에 실패했습니다.");
     } finally {
       setPending(false);
     }
@@ -47,10 +61,12 @@ export function LoginForm() {
           <div className="flex w-full flex-col gap-4">
             {/* Email */}
             <div className="flex w-full flex-col gap-2">
-              <label className="text-[14px] font-semibold leading-[1.45] tracking-[0.07px] text-text-primary">
+              <label htmlFor="login-email" className="text-[14px] font-semibold leading-[1.45] tracking-[0.07px] text-text-primary">
                 이메일
               </label>
               <input
+                id="login-email"
+                name="email"
                 type="email"
                 autoComplete="email"
                 required
@@ -63,7 +79,7 @@ export function LoginForm() {
 
             {/* Password */}
             <div className="flex w-full flex-col gap-2">
-              <label className="text-[14px] font-semibold leading-[1.45] tracking-[0.07px] text-text-primary">
+              <label htmlFor="login-password" className="text-[14px] font-semibold leading-[1.45] tracking-[0.07px] text-text-primary">
                 비밀번호
               </label>
               <div className="flex h-12 w-full items-center justify-between rounded-[24px] border border-grayscale-40 bg-background-30 px-4 py-3 focus-within:ring-2 focus-within:ring-primary-40">
@@ -136,7 +152,9 @@ export function LoginForm() {
             {/* Google login */}
             <button
               type="button"
-              className="flex h-12 w-full items-center justify-center rounded-[24px] border border-text-tertiary bg-background-10 px-4 py-3"
+              disabled
+              title="구글 로그인은 현재 준비 중입니다."
+              className="flex h-12 w-full items-center justify-center rounded-[24px] border border-text-tertiary bg-background-10 px-4 py-3 disabled:opacity-50"
             >
               <span className="flex items-center gap-2">
                 <span className="block size-6">
@@ -144,7 +162,7 @@ export function LoginForm() {
                   <img src="/figma/icon-google.svg" alt="" className="h-full w-full" />
                 </span>
                 <span className="text-center text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-text-primary">
-                  구글 로그인 하기
+                  구글 로그인 (준비 중)
                 </span>
               </span>
             </button>
@@ -153,7 +171,7 @@ export function LoginForm() {
           {/* Footer links */}
           <div className="flex w-full items-center justify-between px-2.5">
             <Link
-              href="#"
+              href="/signup"
               className="text-[14px] font-medium leading-[1.55] tracking-[0.07px] text-primary-60 underline"
             >
               회원가입하기
