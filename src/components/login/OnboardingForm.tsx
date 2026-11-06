@@ -72,7 +72,7 @@ export function OnboardingForm() {
   }
   const field = "w-full rounded-2xl border border-background-50 bg-background-30 p-4 outline-none focus:ring-2 focus:ring-primary-60";
   return (
-    <main className="w-full max-w-lg rounded-[32px] bg-background-10 p-6 shadow-lg md:p-10">
+    <main className="w-full max-w-[512px] rounded-[32px] bg-background-10 p-6 shadow-lg md:p-10">
       <h1 className="text-2xl font-semibold text-text-primary">기본 프로필 설정</h1>
       <p className="my-4 text-sm text-text-secondary">
         {stage === "BASIC" ? "1/2 · 기본 정보를 입력해 주세요." : "2/2 · 희망 직군을 입력해 주세요."}

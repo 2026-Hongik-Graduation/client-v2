@@ -126,6 +126,8 @@ export function ApplicationsBoard() {
   const [busyId, setBusyId] = useState("");
   const [creating, setCreating] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
+  const [createStage, setCreateStage] = useState<Stage>("PLANNED");
+  const [createError, setCreateError] = useState("");
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
   const [deadline, setDeadline] = useState("");
@@ -205,25 +207,44 @@ export function ApplicationsBoard() {
     const id = event.dataTransfer.getData("text/plain");
     if (all.some(item => item.id === id)) void move(id, next);
   }
+  function openCreate(stage: Stage = "PLANNED") {
+    setCreateStage(stage); setCreateError(""); setShowCreate(true);
+  }
   async function add(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (creating) return;
     if (!company.trim() || !position.trim() || company.trim().length > 150 || position.trim().length > 150) {
-      setError("기업명과 직무명은 각각 1~150자로 입력해 주세요."); return;
+      setCreateError("기업명과 직무명은 각각 1~150자로 입력해 주세요."); return;
     }
-    setCreating(true); setError(""); setNotice("");
+    setCreating(true); setCreateError(""); setNotice("");
     try {
       const created = await coverApi.create({
         companyName: company.trim(), positionName: position.trim(),
         deadline: deadline || null, jdUrl: null,
       });
+      let placed = created;
+      let placedStage: Stage = "PLANNED";
+      let moveFailed = false;
+      if (createStage !== "PLANNED") {
+        try {
+          placed = await applicationApi.move(created.id, createStage);
+          placedStage = createStage;
+        } catch { moveFailed = true; }
+      }
       setBoard(prev => prev ? {
-        ...prev, columns: { ...prev.columns, PLANNED: [created, ...prev.columns.PLANNED] },
+        ...prev, columns: {
+          ...prev.columns,
+          [placedStage]: [placed, ...(prev.columns[placedStage] || [])],
+        },
       } : prev);
       setShowCreate(false); setCompany(""); setPosition(""); setDeadline("");
-      setNotice("새 지원 카드와 연결된 자소서를 만들었어요. ‘지원 예정’에 추가되었습니다.");
+      setSearchInput(""); setSearch(""); setStageFilter(""); setView("board");
+      setNotice(moveFailed
+        ? "지원 카드는 등록됐지만 단계 이동에 실패하여 ‘지원 예정’에 추가됐어요. 카드에서 단계를 다시 선택해 주세요."
+        : "새 지원 카드와 연결된 자소서를 만들었어요. ‘" +
+          STAGES.find(s => s.code === placedStage)?.label + "’에 추가되었습니다.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "지원 카드 생성에 실패했습니다.");
+      setCreateError(err instanceof Error ? err.message : "지원 카드 생성에 실패했습니다.");
     } finally { setCreating(false); }
   }
   const field = "w-full rounded-2xl border border-background-50 bg-background-30 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-60";
@@ -235,7 +256,7 @@ export function ApplicationsBoard() {
           <p className="mt-2 text-sm text-text-secondary md:text-base">다양한 방식으로 지원 카드를 관리하고, 일정을 확인해요.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <button type="button" onClick={() => setShowCreate(true)}
+          <button type="button" onClick={() => openCreate()}
             className="rounded-3xl bg-primary-60 px-4 py-3 text-sm font-semibold text-white">+ 지원 카드 추가</button>
           <div className="flex h-12 items-center rounded-full border border-text-disabled p-1" role="group" aria-label="지원 현황 보기">
             <button type="button" aria-pressed={view === "board"} onClick={() => setView("board")}
@@ -275,13 +296,13 @@ export function ApplicationsBoard() {
         }}>다시 불러오기</button>
       </div>}
       {loading && <p role="status" className="p-8 text-text-secondary">지원 카드를 불러오는 중...</p>}
-      {!loading && !error && all.length === 0 && (
+      {!loading && board && all.length === 0 && (
         <div className="rounded-3xl border border-dashed border-primary-30 bg-primary-10 p-8 text-center">
           <p className="font-semibold">아직 지원 카드가 없어요.</p>
           <p className="mt-2 text-sm text-text-secondary">지원 카드를 추가하거나 자소서를 만들면 자동으로 보드에 나타나요.</p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <button type="button" className="rounded-3xl bg-primary-60 px-5 py-3 text-sm text-white"
-              onClick={() => setShowCreate(true)}>첫 지원 등록</button>
+              onClick={() => openCreate()}>첫 지원 등록</button>
             <Link href="/cover-letters/new" className="rounded-3xl border border-primary-60 px-5 py-3 text-sm text-primary-60">
               자소서부터 작성
             </Link>
@@ -313,7 +334,7 @@ export function ApplicationsBoard() {
                     <ApplicationCard key={item.id} app={item} moving={!!busyId}
                       onOpen={setSelected} onMove={move} onDragStart={dragStart} />
                   )) : <p className="py-8 text-center text-xs text-text-primary">카드를 여기로 이동할 수 있어요.</p>}
-                  <button type="button" onClick={() => setShowCreate(true)}
+                  <button type="button" onClick={() => openCreate(stage.code)}
                     className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-primary-30 bg-background-10 px-3 py-3 text-xs font-semibold text-primary-70">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/figma/icon-add-card.svg" alt="" className="size-5" />
@@ -342,17 +363,17 @@ export function ApplicationsBoard() {
         <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 p-4"
           role="presentation" onMouseDown={e => { if (e.target === e.currentTarget && !creating) setShowCreate(false); }}>
           <section role="dialog" aria-modal="true" aria-labelledby="application-add-title"
-            className="w-full max-w-lg rounded-3xl bg-background-10 p-6 shadow-lg md:p-8">
+            className="max-h-[calc(100dvh-32px)] w-full max-w-[512px] overflow-y-auto rounded-3xl bg-background-10 p-6 shadow-lg md:p-8">
             <div className="mb-5 flex items-center justify-between gap-4">
               <h2 id="application-add-title" className="text-xl font-semibold">지원 카드 추가</h2>
               <button type="button" disabled={creating} onClick={() => setShowCreate(false)}
                 className="rounded-full bg-background-30 px-3 py-2 text-sm" aria-label="닫기">✕</button>
             </div>
             <p className="mb-5 text-xs text-text-secondary">
-              새 지원 카드는 연결된 자기소개서와 함께 생성되며 ‘지원 예정’ 단계에 저장됩니다.
+              새 지원 카드는 연결된 자기소개서와 함께 생성됩니다. 아래에서 배치할 단계를 선택할 수 있어요.
             </p>
             <form onSubmit={add} className="flex flex-col gap-4">
-              {error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+              {createError && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{createError}</p>}
               <label className="flex flex-col gap-2 text-sm font-semibold">기업명
                 <input value={company} required maxLength={150} onChange={e => setCompany(e.target.value)}
                   className={field} placeholder="예) 네이버" />
@@ -364,6 +385,12 @@ export function ApplicationsBoard() {
               <label className="flex flex-col gap-2 text-sm font-semibold">마감일 (선택)
                 <input type="date" value={deadline} onChange={e => setDeadline(e.target.value)}
                   className={field} />
+              </label>
+              <label className="flex flex-col gap-2 text-sm font-semibold">지원 단계
+                <select value={createStage} onChange={e => setCreateStage(e.target.value as Stage)}
+                  className={field}>
+                  {STAGES.map(stage => <option key={stage.code} value={stage.code}>{stage.label}</option>)}
+                </select>
               </label>
               <div className="mt-3 flex justify-end gap-3">
                 <button type="button" disabled={creating} onClick={() => setShowCreate(false)}

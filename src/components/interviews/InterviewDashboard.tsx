@@ -51,7 +51,7 @@ export function InterviewDashboard() {
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary-50 to-primary-80 p-6 text-text-inverse md:p-8">
         <div className="relative z-10">
           <p className="text-lg font-semibold">면접 준비, 이미 쓴 자기소개서에서 시작해요.</p>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-primary-10">
+          <p className="mt-3 max-w-[672px] text-sm leading-6 text-primary-10">
             지원 기업을 선택하면 기본 질문과 자소서 문항을 바탕으로 연습 질문을 보여드려요.
             타이머·답변 작성·내보내기가 가능하며 AI 면접관이나 자동 평가는 아직 지원하지 않아요.
           </p>
