@@ -1,0 +1,7 @@
+{
+  "devBypassCount": 0,
+  "spoofCookieExperiencesPath": "/login",
+  "spoofCookieRedirectedToLogin": true,
+  "refreshNoTokenStatus": 401,
+  "crossOriginStatus": 403
+}

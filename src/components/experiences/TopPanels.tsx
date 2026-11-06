@@ -14,7 +14,7 @@ const CATEGORY_BARS = [
 function AddExperiencePanel() {
   return (
     <div
-      className="relative flex h-[304px] min-w-[285px] flex-1 flex-col items-start overflow-hidden rounded-3xl border-[0.8px] border-white/80 p-8 drop-shadow-[0px_0px_15px_rgba(15,51,47,0.15)]"
+      className="relative flex h-[304px] w-full min-w-0 flex-1 flex-col items-start overflow-hidden rounded-3xl border-[0.8px] border-white/80 p-8 drop-shadow-[0px_0px_15px_rgba(15,51,47,0.15)]"
       style={{
         backgroundImage:
           "linear-gradient(124.88deg, var(--color-primary-50) 6.2%, var(--color-primary-80) 84.76%)",
@@ -67,7 +67,7 @@ function AddExperiencePanel() {
 
 function CategoryDistribution({ experiences }: { experiences: ExperienceRecord[] }) {
   return (
-    <div className="flex h-[304px] min-w-[457px] flex-1 flex-col items-start gap-4 rounded-3xl border-[0.8px] border-white/80 bg-white/70 p-8 shadow-[0px_0px_30px_0px_rgba(15,51,47,0.15)]">
+    <div className="flex h-[304px] w-full min-w-0 flex-1 flex-col items-start gap-4 sm:min-w-[457px] rounded-3xl border-[0.8px] border-white/80 bg-white/70 p-4 sm:p-8 shadow-[0px_0px_30px_0px_rgba(15,51,47,0.15)]">
       <div className="flex w-full flex-col items-start gap-2">
         <p className="w-full text-[16px] font-semibold leading-[1.5] text-text-primary">
           경험 카테고리 분포
@@ -82,7 +82,7 @@ function CategoryDistribution({ experiences }: { experiences: ExperienceRecord[]
           const count = experiences.filter(e => tagInfo(e.tagCode).label === bar.label).length;
           const percent = experiences.length ? Math.round(count / experiences.length * 100) : 0;
           return (
-          <div key={bar.label} className="flex w-full items-center gap-6">
+          <div key={bar.label} className="flex w-full items-center gap-2 sm:gap-6">
             <div className="flex w-16 shrink-0 items-center p-1">
               <span className="whitespace-nowrap text-[11px] font-normal leading-[1.3] tracking-[0.165px] text-text-secondary">
                 {bar.label}
@@ -105,7 +105,7 @@ function CategoryDistribution({ experiences }: { experiences: ExperienceRecord[]
 
 export function TopPanels({ experiences }: { experiences: ExperienceRecord[] }) {
   return (
-    <div className="flex w-full flex-wrap content-center items-center justify-center gap-8">
+    <div className="flex w-full flex-col gap-8 sm:flex-row sm:flex-wrap sm:content-center sm:items-center sm:justify-center">
       <AddExperiencePanel />
       <CategoryDistribution experiences={experiences} />
     </div>

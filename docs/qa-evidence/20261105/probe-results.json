@@ -1,0 +1,836 @@
+{
+  "when": "2026-11-05T11:34:28.878Z",
+  "mode": "dev-preview",
+  "routes": [
+    {
+      "phase": "unauth",
+      "route": "/",
+      "label": "/",
+      "url": "/",
+      "heading": [],
+      "buttons": [],
+      "links": [
+        "경험정리",
+        "자소서 관리",
+        "지원현황",
+        "면접",
+        "회원가입하기",
+        "로그인하기",
+        "내 경험 정리하러가기",
+        "자소서 생성하러 가기",
+        "기능 살펴보기 →"
+      ],
+      "inputs": []
+    },
+    {
+      "phase": "unauth",
+      "route": "/signup",
+      "label": "/signup",
+      "url": "/signup",
+      "heading": [
+        "회원가입"
+      ],
+      "buttons": [
+        "인증번호 받기"
+      ],
+      "links": [
+        "POFIT",
+        "이미 계정이 있나요? 로그인"
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "example@email.com",
+          "type": "email",
+          "label": null
+        }
+      ]
+    },
+    {
+      "phase": "unauth",
+      "route": "/find-password",
+      "label": "/find-password",
+      "url": "/find-password",
+      "heading": [
+        "비밀번호 찾기"
+      ],
+      "buttons": [
+        "인증코드 발송",
+        "인증하기",
+        "다음"
+      ],
+      "links": [],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "example@email.com",
+          "type": "text",
+          "label": null
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "인증코드 6자리를 입력해주세요.",
+          "type": "text",
+          "label": null
+        }
+      ]
+    },
+    {
+      "phase": "unauth",
+      "route": "/login",
+      "label": "/login",
+      "url": "/login",
+      "heading": [],
+      "buttons": [
+        "로그인 유지",
+        "로그인하기",
+        "개발용 로그인 건너뛰기 →",
+        "구글 로그인 (준비 중)"
+      ],
+      "links": [
+        "회원가입하기",
+        "비밀번호 찾기"
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "example@email.com",
+          "type": "email",
+          "label": null
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "password",
+          "type": "password",
+          "label": null
+        }
+      ]
+    },
+    {
+      "phase": "unauth",
+      "route": "/experiences",
+      "label": "/experiences",
+      "url": "/login",
+      "heading": [],
+      "buttons": [
+        "로그인 유지",
+        "로그인하기",
+        "개발용 로그인 건너뛰기 →",
+        "구글 로그인 (준비 중)"
+      ],
+      "links": [
+        "회원가입하기",
+        "비밀번호 찾기"
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "example@email.com",
+          "type": "email",
+          "label": null
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "password",
+          "type": "password",
+          "label": null
+        }
+      ]
+    },
+    {
+      "phase": "unauth",
+      "route": "/cover-letters",
+      "label": "/cover-letters",
+      "url": "/login",
+      "heading": [],
+      "buttons": [
+        "로그인 유지",
+        "로그인하기",
+        "개발용 로그인 건너뛰기 →",
+        "구글 로그인 (준비 중)"
+      ],
+      "links": [
+        "회원가입하기",
+        "비밀번호 찾기"
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "example@email.com",
+          "type": "email",
+          "label": null
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "password",
+          "type": "password",
+          "label": null
+        }
+      ]
+    },
+    {
+      "phase": "unauth",
+      "route": "/applications",
+      "label": "/applications",
+      "url": "/login",
+      "heading": [],
+      "buttons": [
+        "로그인 유지",
+        "로그인하기",
+        "개발용 로그인 건너뛰기 →",
+        "구글 로그인 (준비 중)"
+      ],
+      "links": [
+        "회원가입하기",
+        "비밀번호 찾기"
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "example@email.com",
+          "type": "email",
+          "label": null
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "password",
+          "type": "password",
+          "label": null
+        }
+      ]
+    },
+    {
+      "phase": "unauth",
+      "route": "/interviews",
+      "label": "/interviews",
+      "url": "/login",
+      "heading": [],
+      "buttons": [
+        "로그인 유지",
+        "로그인하기",
+        "개발용 로그인 건너뛰기 →",
+        "구글 로그인 (준비 중)"
+      ],
+      "links": [
+        "회원가입하기",
+        "비밀번호 찾기"
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "example@email.com",
+          "type": "email",
+          "label": null
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "password",
+          "type": "password",
+          "label": null
+        }
+      ]
+    },
+    {
+      "phase": "preview",
+      "route": "/",
+      "label": "/",
+      "url": "/",
+      "heading": [],
+      "buttons": [],
+      "links": [
+        "경험정리",
+        "자소서 관리",
+        "지원현황",
+        "면접",
+        "회원가입하기",
+        "로그인하기",
+        "내 경험 정리하러가기",
+        "자소서 생성하러 가기",
+        "기능 살펴보기 →"
+      ],
+      "inputs": []
+    },
+    {
+      "phase": "preview",
+      "route": "/login",
+      "label": "/login",
+      "url": "/login",
+      "heading": [],
+      "buttons": [
+        "로그인 유지",
+        "로그인하기",
+        "개발용 로그인 건너뛰기 →",
+        "구글 로그인 (준비 중)"
+      ],
+      "links": [
+        "회원가입하기",
+        "비밀번호 찾기"
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "example@email.com",
+          "type": "email",
+          "label": null
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "password",
+          "type": "password",
+          "label": null
+        }
+      ]
+    },
+    {
+      "phase": "preview",
+      "route": "/experiences",
+      "label": "/experiences",
+      "url": "/experiences",
+      "heading": [
+        "경험 대시보드"
+      ],
+      "buttons": [
+        "로그아웃",
+        "검색하기",
+        "전체",
+        "STAR",
+        "성장·가치관",
+        "장단점",
+        "협업",
+        "학업·직무",
+        "도전·극복",
+        "필터 초기화"
+      ],
+      "links": [
+        "경험",
+        "2자소서",
+        "3지원",
+        "4면접",
+        "+ 경험 추가하기",
+        "새 경험 추가하기 →",
+        "새 경험 작성"
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "경험 제목이나 요약 검색...",
+          "type": "search",
+          "label": null
+        },
+        {
+          "tag": "SELECT",
+          "placeholder": null,
+          "type": null,
+          "label": null
+        }
+      ]
+    },
+    {
+      "phase": "preview",
+      "route": "/experiences/new",
+      "label": "/experiences/new",
+      "url": "/experiences/new",
+      "heading": [
+        "경험 추가하기"
+      ],
+      "buttons": [
+        "로그아웃",
+        "다음단계로 →",
+        "STAR순서대로 정리",
+        "성장·가치관나를 만든 경험",
+        "장단점강점과 보완 경험",
+        "협업함께 해결한 경험",
+        "학업·직무직무와 연결된 경험",
+        "도전·극복어려움 극복 경험",
+        "선택하기 →",
+        "선택하기 →",
+        "선택하기 →"
+      ],
+      "links": [
+        "경험",
+        "2자소서",
+        "3지원",
+        "4면접"
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "경험 제목을 입력해주세요.",
+          "type": "text",
+          "label": null
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": null,
+          "type": "date",
+          "label": "경험 시작일"
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": null,
+          "type": "date",
+          "label": "경험 종료일"
+        }
+      ]
+    },
+    {
+      "phase": "preview",
+      "route": "/cover-letters",
+      "label": "/cover-letters",
+      "url": "/cover-letters",
+      "heading": [
+        "자기소개서 관리"
+      ],
+      "buttons": [
+        "로그아웃",
+        "검색",
+        "필터 초기화"
+      ],
+      "links": [
+        "1경험",
+        "자소서",
+        "3지원",
+        "4면접",
+        "+ 새 자소서 만들기",
+        "자소서 만들기"
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "기업명이나 직무 검색",
+          "type": null,
+          "label": null
+        },
+        {
+          "tag": "SELECT",
+          "placeholder": null,
+          "type": null,
+          "label": null
+        }
+      ]
+    },
+    {
+      "phase": "preview",
+      "route": "/cover-letters/new",
+      "label": "/cover-letters/new",
+      "url": "/cover-letters/new",
+      "heading": [
+        "새 자소서 만들기"
+      ],
+      "buttons": [
+        "로그아웃",
+        "링크 붙여넣기",
+        "텍스트 붙여넣기",
+        "저장하고 문항 작성하기 →"
+      ],
+      "links": [
+        "1경험",
+        "자소서",
+        "3지원",
+        "4면접",
+        "← 자소서 목록"
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "ex) 토스뱅크",
+          "type": null,
+          "label": null
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "ex) 백엔드 개발자",
+          "type": null,
+          "label": null
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": null,
+          "type": "date",
+          "label": null
+        },
+        {
+          "tag": "INPUT",
+          "placeholder": "https://example.com/jobs/123",
+          "type": "url",
+          "label": null
+        }
+      ]
+    },
+    {
+      "phase": "preview",
+      "route": "/applications",
+      "label": "/applications",
+      "url": "/applications",
+      "heading": [
+        "지원 현황 관리"
+      ],
+      "buttons": [
+        "로그아웃",
+        "+ 지원 카드 추가",
+        "칸반보드",
+        "캘린더",
+        "검색하기",
+        "첫 지원 등록",
+        "카드 추가하기",
+        "카드 추가하기",
+        "카드 추가하기",
+        "카드 추가하기"
+      ],
+      "links": [
+        "1경험",
+        "2자소서",
+        "지원",
+        "4면접",
+        "새 경험 추가하기 →",
+        "자소서부터 작성"
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "기업명, 직무명으로 검색...",
+          "type": "search",
+          "label": null
+        },
+        {
+          "tag": "SELECT",
+          "placeholder": null,
+          "type": null,
+          "label": null
+        }
+      ]
+    },
+    {
+      "phase": "preview",
+      "route": "/interviews",
+      "label": "/interviews",
+      "url": "/interviews",
+      "heading": [
+        "면접 준비"
+      ],
+      "buttons": [
+        "로그아웃",
+        "필터 초기화"
+      ],
+      "links": [
+        "1경험",
+        "2자소서",
+        "3지원",
+        "면접",
+        "지원 현황으로 →",
+        "새 자소서 만들기"
+      ],
+      "inputs": [
+        {
+          "tag": "INPUT",
+          "placeholder": "기업명이나 직무 검색",
+          "type": "search",
+          "label": null
+        },
+        {
+          "tag": "SELECT",
+          "placeholder": null,
+          "type": null,
+          "label": null
+        }
+      ]
+    },
+    {
+      "phase": "responsive",
+      "route": "/",
+      "width": 1440,
+      "viewport": 1440,
+      "scrollWidth": 1460,
+      "bodyWidth": 1460,
+      "missingLabels": 0,
+      "shot": "preview-home-1440.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/login",
+      "width": 1440,
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "bodyWidth": 1440,
+      "missingLabels": 1,
+      "shot": "preview-login-1440.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/experiences",
+      "width": 1440,
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "bodyWidth": 1440,
+      "missingLabels": 0,
+      "shot": "preview-experiences-1440.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/cover-letters",
+      "width": 1440,
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "bodyWidth": 1440,
+      "missingLabels": 0,
+      "shot": "preview-cover-letters-1440.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/applications",
+      "width": 1440,
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "bodyWidth": 1440,
+      "missingLabels": 0,
+      "shot": "preview-applications-1440.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/interviews",
+      "width": 1440,
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "bodyWidth": 1440,
+      "missingLabels": 0,
+      "shot": "preview-interviews-1440.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/",
+      "width": 1023,
+      "viewport": 1023,
+      "scrollWidth": 1079,
+      "bodyWidth": 1079,
+      "missingLabels": 0,
+      "shot": "preview-home-1023.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/login",
+      "width": 1023,
+      "viewport": 1023,
+      "scrollWidth": 1023,
+      "bodyWidth": 1023,
+      "missingLabels": 1,
+      "shot": "preview-login-1023.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/experiences",
+      "width": 1023,
+      "viewport": 1023,
+      "scrollWidth": 1023,
+      "bodyWidth": 1023,
+      "missingLabels": 0,
+      "shot": "preview-experiences-1023.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/cover-letters",
+      "width": 1023,
+      "viewport": 1023,
+      "scrollWidth": 1023,
+      "bodyWidth": 1023,
+      "missingLabels": 0,
+      "shot": "preview-cover-letters-1023.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/applications",
+      "width": 1023,
+      "viewport": 1023,
+      "scrollWidth": 1023,
+      "bodyWidth": 1023,
+      "missingLabels": 0,
+      "shot": "preview-applications-1023.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/interviews",
+      "width": 1023,
+      "viewport": 1023,
+      "scrollWidth": 1023,
+      "bodyWidth": 1023,
+      "missingLabels": 0,
+      "shot": "preview-interviews-1023.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/",
+      "width": 720,
+      "viewport": 720,
+      "scrollWidth": 776,
+      "bodyWidth": 776,
+      "missingLabels": 0,
+      "shot": "preview-home-720.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/login",
+      "width": 720,
+      "viewport": 720,
+      "scrollWidth": 720,
+      "bodyWidth": 720,
+      "missingLabels": 1,
+      "shot": "preview-login-720.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/experiences",
+      "width": 720,
+      "viewport": 720,
+      "scrollWidth": 720,
+      "bodyWidth": 720,
+      "missingLabels": 0,
+      "shot": "preview-experiences-720.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/cover-letters",
+      "width": 720,
+      "viewport": 720,
+      "scrollWidth": 720,
+      "bodyWidth": 720,
+      "missingLabels": 0,
+      "shot": "preview-cover-letters-720.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/applications",
+      "width": 720,
+      "viewport": 720,
+      "scrollWidth": 720,
+      "bodyWidth": 720,
+      "missingLabels": 0,
+      "shot": "preview-applications-720.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/interviews",
+      "width": 720,
+      "viewport": 720,
+      "scrollWidth": 720,
+      "bodyWidth": 720,
+      "missingLabels": 0,
+      "shot": "preview-interviews-720.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/",
+      "width": 360,
+      "viewport": 360,
+      "scrollWidth": 416,
+      "bodyWidth": 416,
+      "missingLabels": 0,
+      "shot": "preview-home-360.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/login",
+      "width": 360,
+      "viewport": 360,
+      "scrollWidth": 360,
+      "bodyWidth": 360,
+      "missingLabels": 1,
+      "shot": "preview-login-360.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/experiences",
+      "width": 360,
+      "viewport": 360,
+      "scrollWidth": 453,
+      "bodyWidth": 453,
+      "missingLabels": 0,
+      "shot": "preview-experiences-360.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/cover-letters",
+      "width": 360,
+      "viewport": 360,
+      "scrollWidth": 360,
+      "bodyWidth": 360,
+      "missingLabels": 0,
+      "shot": "preview-cover-letters-360.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/applications",
+      "width": 360,
+      "viewport": 360,
+      "scrollWidth": 360,
+      "bodyWidth": 360,
+      "missingLabels": 0,
+      "shot": "preview-applications-360.png"
+    },
+    {
+      "phase": "responsive",
+      "route": "/interviews",
+      "width": 360,
+      "viewport": 360,
+      "scrollWidth": 360,
+      "bodyWidth": 360,
+      "missingLabels": 0,
+      "shot": "preview-interviews-360.png"
+    }
+  ],
+  "events": [],
+  "networkMutations": [],
+  "afterClick": {
+    "label": "afterclick",
+    "url": "/cover-letters",
+    "heading": [
+      "자기소개서 관리"
+    ],
+    "buttons": [
+      "로그아웃",
+      "검색",
+      "필터 초기화"
+    ],
+    "links": [
+      "1경험",
+      "자소서",
+      "3지원",
+      "4면접",
+      "+ 새 자소서 만들기",
+      "자소서 만들기",
+      "회원가입하기",
+      "비밀번호 찾기"
+    ],
+    "inputs": [
+      {
+        "tag": "INPUT",
+        "placeholder": "기업명이나 직무 검색",
+        "type": null,
+        "label": null
+      },
+      {
+        "tag": "SELECT",
+        "placeholder": null,
+        "type": null,
+        "label": null
+      },
+      {
+        "tag": "INPUT",
+        "placeholder": "example@email.com",
+        "type": "email",
+        "label": null
+      },
+      {
+        "tag": "INPUT",
+        "placeholder": "password",
+        "type": "password",
+        "label": null
+      }
+    ]
+  },
+  "preview": {
+    "url": "http://localhost:3000/cover-letters",
+    "cookieNames": [
+      "pofit_dev_preview"
+    ],
+    "storeExists": false
+  }
+}

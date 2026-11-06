@@ -47,7 +47,7 @@ export function Steps() {
   return (
     <section
       id="steps"
-      className="w-full bg-gradient-to-b from-grayscale-10 to-primary-20 px-6 lg:px-[60px]"
+      className="w-full overflow-x-clip bg-gradient-to-b from-grayscale-10 to-primary-20 px-6 lg:px-[60px]"
     >
       <div className="mx-auto w-full max-w-[1320px] py-[120px]">
         <div className="flex w-full flex-col items-start gap-10">

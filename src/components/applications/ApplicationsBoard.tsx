@@ -307,14 +307,14 @@ export function ApplicationsBoard() {
                   <header className="flex items-center gap-2">
                     <span className={`size-2 rounded-sm ${stage.dot}`} />
                     <h2 className="text-base font-semibold text-text-primary">{stage.label}</h2>
-                    <span className="text-xs text-text-secondary">({items.length})</span>
+                    <span className="text-xs text-text-primary">({items.length})</span>
                   </header>
                   {items.length > 0 ? items.map(item => (
                     <ApplicationCard key={item.id} app={item} moving={!!busyId}
                       onOpen={setSelected} onMove={move} onDragStart={dragStart} />
-                  )) : <p className="py-8 text-center text-xs text-text-secondary">카드를 여기로 이동할 수 있어요.</p>}
+                  )) : <p className="py-8 text-center text-xs text-text-primary">카드를 여기로 이동할 수 있어요.</p>}
                   <button type="button" onClick={() => setShowCreate(true)}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-primary-30 bg-background-10 px-3 py-3 text-xs font-semibold text-primary-50">
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-primary-30 bg-background-10 px-3 py-3 text-xs font-semibold text-primary-70">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/figma/icon-add-card.svg" alt="" className="size-5" />
                     카드 추가하기

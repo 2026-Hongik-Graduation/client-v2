@@ -117,10 +117,11 @@ export function NewExperienceForm() {
               <div className="flex w-full flex-col justify-center rounded-3xl border border-background-50 bg-background-20 px-6 py-8">
                 <div className="flex w-full flex-wrap content-center items-start gap-8">
                   <div className="flex min-w-[260px] flex-1 flex-col items-start gap-2">
-                    <label className="w-full text-[14px] font-semibold leading-[1.45] tracking-[0.07px] text-text-primary">
+                    <label htmlFor="experience-title" className="w-full text-[14px] font-semibold leading-[1.45] tracking-[0.07px] text-text-primary">
                       경험 제목
                     </label>
                     <input
+                      id="experience-title"
                       type="text"
                       maxLength={150}
                       required
@@ -270,7 +271,7 @@ export function NewExperienceForm() {
                     >
                       <span
                         className={`whitespace-nowrap text-center text-[14px] font-medium leading-[1.55] tracking-[0.07px] ${
-                          active ? "text-text-inverse" : "text-status-success"
+                          active ? "text-text-inverse" : "text-primary-80"
                         }`}
                       >
                         선택하기 →

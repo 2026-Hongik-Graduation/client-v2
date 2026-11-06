@@ -1,0 +1,147 @@
+[
+  {
+    "route": "/login",
+    "width": 1440,
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 2,
+        "selectors": [
+          ".text-text-disabled.text-center.font-medium",
+          ".text-text-tertiary"
+        ]
+      }
+    ]
+  },
+  {
+    "route": "/experiences/new",
+    "width": 1440,
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 3,
+        "selectors": [
+          ".gap-1.items-start.flex-col > .text-text-tertiary",
+          ".min-h-\\[280px\\].px-8.py-6:nth-child(1) > .bg-primary-20.px-4.h-12 > .text-status-success.whitespace-nowrap.font-medium",
+          ".min-h-\\[280px\\].px-8.py-6:nth-child(3) > .bg-primary-20.px-4.h-12 > .text-status-success.whitespace-nowrap.font-medium"
+        ]
+      }
+    ]
+  },
+  {
+    "route": "/cover-letters/new",
+    "width": 1440,
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 5,
+        "selectors": [
+          ".bg-primary-20",
+          ".px-3.py-2.text-xs:nth-child(2)",
+          ".px-3.py-2.text-xs:nth-child(3)",
+          ".px-3.py-2.text-xs:nth-child(4)"
+        ]
+      }
+    ]
+  },
+  {
+    "route": "/applications",
+    "width": 1440,
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 1,
+        "selectors": [
+          ".text-xs.px-3[type=\"button\"]:nth-child(2)"
+        ]
+      }
+    ]
+  },
+  {
+    "route": "/interviews",
+    "width": 1440,
+    "violations": []
+  },
+  {
+    "route": "/login",
+    "width": 360,
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 2,
+        "selectors": [
+          ".text-text-disabled.text-center.font-medium",
+          ".text-text-tertiary"
+        ]
+      }
+    ]
+  },
+  {
+    "route": "/experiences/new",
+    "width": 360,
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 3,
+        "selectors": [
+          ".gap-1.items-start.flex-col > .text-text-tertiary",
+          ".min-h-\\[280px\\].px-8.py-6:nth-child(1) > .bg-primary-20.px-4.h-12 > .text-status-success.whitespace-nowrap.font-medium",
+          ".min-h-\\[280px\\].px-8.py-6:nth-child(3) > .bg-primary-20.px-4.h-12 > .text-status-success.whitespace-nowrap.font-medium"
+        ]
+      }
+    ]
+  },
+  {
+    "route": "/cover-letters/new",
+    "width": 360,
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 5,
+        "selectors": [
+          ".bg-primary-20",
+          ".px-3.py-2.text-xs:nth-child(2)",
+          ".px-3.py-2.text-xs:nth-child(3)",
+          ".px-3.py-2.text-xs:nth-child(4)"
+        ]
+      }
+    ]
+  },
+  {
+    "route": "/applications",
+    "width": 360,
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 11,
+        "selectors": [
+          ".h-full.rounded-full.px-3:nth-child(2)",
+          "section[aria-label=\"지원 예정\"] > .text-primary-50.border-primary-30.border-dashed",
+          ".bg-primary-20 > .text-primary-50.border-primary-30.border-dashed",
+          ".bg-primary-30 > header > .text-xs.text-text-secondary"
+        ]
+      }
+    ]
+  },
+  {
+    "route": "/interviews",
+    "width": 360,
+    "violations": []
+  }
+]
