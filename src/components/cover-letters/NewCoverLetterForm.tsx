@@ -102,11 +102,11 @@ export function NewCoverLetterForm() {
           <h2 className="mb-4 text-lg font-semibold">채용공고 입력 (선택)</h2>
           <div className="mb-5 flex flex-wrap gap-3">
             <button type="button" aria-pressed={tab === "link"} onClick={() => setTab("link")}
-              className={`rounded-3xl px-5 py-3 text-sm ${tab === "link" ? "bg-primary-80 text-white" : "bg-background-50 text-text-secondary"}`}>
+              className={`rounded-3xl px-5 py-3 text-sm ${tab === "link" ? "bg-primary-80 text-white" : "bg-background-50 text-text-primary"}`}>
               링크 붙여넣기
             </button>
             <button type="button" aria-pressed={tab === "text"} onClick={() => setTab("text")}
-              className={`rounded-3xl px-5 py-3 text-sm ${tab === "text" ? "bg-primary-80 text-white" : "bg-background-50 text-text-secondary"}`}>
+              className={`rounded-3xl px-5 py-3 text-sm ${tab === "text" ? "bg-primary-80 text-white" : "bg-background-50 text-text-primary"}`}>
               텍스트 붙여넣기
             </button>
           </div>
