@@ -1,0 +1,47 @@
+[
+  {
+    "width": 1440,
+    "initial": {
+      "name": "예) 네이버",
+      "tag": "INPUT"
+    },
+    "prior": "닫기",
+    "wrapped": "지원 등록",
+    "back": "닫기",
+    "axe": [],
+    "detailAxe": [],
+    "closed": true,
+    "focusRestored": true,
+    "detailClosed": true
+  },
+  {
+    "width": 390,
+    "initial": {
+      "name": "예) 네이버",
+      "tag": "INPUT"
+    },
+    "prior": "닫기",
+    "wrapped": "지원 등록",
+    "back": "닫기",
+    "axe": [],
+    "detailAxe": [],
+    "closed": true,
+    "focusRestored": true,
+    "detailClosed": true
+  },
+  {
+    "width": 360,
+    "initial": {
+      "name": "예) 네이버",
+      "tag": "INPUT"
+    },
+    "prior": "닫기",
+    "wrapped": "지원 등록",
+    "back": "닫기",
+    "axe": [],
+    "detailAxe": [],
+    "closed": true,
+    "focusRestored": true,
+    "detailClosed": true
+  }
+]

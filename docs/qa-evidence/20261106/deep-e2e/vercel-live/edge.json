@@ -1,0 +1,159 @@
+{
+  "base": "https://client-v2-one.vercel.app",
+  "results": [
+    {
+      "name": "SEC-guest-protected-paths",
+      "status": "PASS"
+    },
+    {
+      "name": "SEC-unauth-refresh-401",
+      "status": "PASS"
+    },
+    {
+      "name": "SEC-cross-origin-write-403",
+      "status": "PASS"
+    },
+    {
+      "name": "SEC-demo-entry-no-auth-cookies",
+      "status": "PASS"
+    },
+    {
+      "name": "SEC-demo-api-get-and-write-denied",
+      "status": "PASS"
+    },
+    {
+      "name": "G1-empty-experience-rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "G1-experience-create",
+      "status": "PASS"
+    },
+    {
+      "name": "G1-incomplete-completion-blocked",
+      "status": "PASS"
+    },
+    {
+      "name": "G1-custom-question-save-and-reload",
+      "status": "PASS"
+    },
+    {
+      "name": "G1-cancel-experience-delete",
+      "status": "PASS"
+    },
+    {
+      "name": "G2-cover-create",
+      "status": "PASS"
+    },
+    {
+      "name": "G2-posting-url-rejection",
+      "status": "PASS"
+    },
+    {
+      "name": "G2-posting-text-persists",
+      "status": "PASS"
+    },
+    {
+      "name": "G2-question-empty-validation",
+      "status": "PASS"
+    },
+    {
+      "name": "G2-two-questions-created",
+      "status": "PASS"
+    },
+    {
+      "name": "G2-emoji-count-and-limit",
+      "status": "PASS"
+    },
+    {
+      "name": "G2-reorder-question-and-persist",
+      "status": "PASS"
+    },
+    {
+      "name": "G2-version-create",
+      "status": "PASS"
+    },
+    {
+      "name": "G2-remove-one-question",
+      "status": "PASS"
+    },
+    {
+      "name": "G2-version-restore",
+      "status": "PASS"
+    },
+    {
+      "name": "G2-save-metadata-and-board-consistency",
+      "status": "PASS"
+    },
+    {
+      "name": "G3-stage-list-select-and-filter",
+      "status": "PASS"
+    },
+    {
+      "name": "G3-search-then-clear",
+      "status": "PASS"
+    },
+    {
+      "name": "G3-calendar-month-switch-and-card",
+      "status": "PASS"
+    },
+    {
+      "name": "G3-card-modal-keyboard-escape",
+      "status": "PASS"
+    },
+    {
+      "name": "G3-modal-close-without-save",
+      "status": "PASS"
+    },
+    {
+      "name": "G3-per-column-create-and-persist",
+      "status": "PASS"
+    },
+    {
+      "name": "G3-stage-drag-drop",
+      "status": "PASS"
+    },
+    {
+      "name": "G5-question-persistence-and-clear",
+      "status": "PASS"
+    },
+    {
+      "name": "G5-timer-start-pause-reset",
+      "status": "PASS"
+    },
+    {
+      "name": "SEC-browser-context-isolation",
+      "status": "PASS"
+    },
+    {
+      "name": "SEC-demo-survives-reload",
+      "status": "PASS"
+    },
+    {
+      "name": "G0-logout-and-relogin",
+      "status": "PASS"
+    },
+    {
+      "name": "G2-delete-cover-and-remove-application",
+      "status": "PASS"
+    },
+    {
+      "name": "G1-delete-experience-persistently",
+      "status": "PASS"
+    },
+    {
+      "name": "SEC-no-pageerrors",
+      "status": "PASS"
+    },
+    {
+      "name": "SEC-no-unexpected-api-traffic",
+      "status": "PASS"
+    }
+  ],
+  "totals": {
+    "pass": 37,
+    "fail": 0
+  },
+  "errors": [],
+  "network": []
+}

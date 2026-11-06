@@ -1,0 +1,25 @@
+{
+  "results": [
+    {
+      "name": "G2-CREATE-EXTRA",
+      "status": "PASS"
+    },
+    {
+      "name": "G4-MOCK-REVISION",
+      "status": "PASS"
+    },
+    {
+      "name": "G4-APPLY-DOES-NOT-SAVE",
+      "status": "PASS"
+    },
+    {
+      "name": "G3-APPLICATION-DETAIL",
+      "status": "PASS"
+    },
+    {
+      "name": "G5-INTERVIEW-TIMER",
+      "status": "PASS"
+    }
+  ],
+  "net": []
+}
