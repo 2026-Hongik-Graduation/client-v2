@@ -2,11 +2,16 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useState, useSyncExternalStore, type FormEvent } from "react";
+import { isPreviewAvailable } from "@/lib/preview-host";
 import { startPreviewMode, stopPreviewMode } from "@/lib/dev-preview";
+
+const subscribe = () => () => {};
+const serverSnapshot = () => false;
 
 export function LoginForm() {
   const router = useRouter();
+  const demoAvailable = useSyncExternalStore(subscribe, isPreviewAvailable, serverSnapshot);
   const [showPw, setShowPw] = useState(false);
   const [keepLogin, setKeepLogin] = useState(false);
   const [email, setEmail] = useState("");
@@ -149,14 +154,14 @@ export function LoginForm() {
               </span>
             </button>
             {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
-            {process.env.NODE_ENV === "development" && (
+            {demoAvailable && (
               <div className="w-full rounded-2xl border border-primary-40 bg-primary-10 p-3">
                 <button type="button" onClick={enterPreview}
                   className="w-full rounded-3xl border border-primary-60 bg-white px-4 py-3 text-sm font-semibold text-primary-60 hover:bg-primary-20">
-                  개발용 로그인 건너뛰기 →
+                  로그인 건너뛰기 (데모) →
                 </button>
                 <p className="mt-2 text-center text-xs text-text-secondary">
-                  로컬 미리보기 전용 · EC2 로그인·실제 DB 저장 없이 화면을 둘러볼 수 있어요.
+                  데모 모드 · 실제 계정 로그인이나 서버 저장 없이, 이 브라우저에서만 데이터를 저장하며 화면을 둘러볼 수 있어요.
                 </p>
               </div>
             )}

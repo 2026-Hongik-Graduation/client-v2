@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { PREVIEW_COOKIE, isPreviewHost } from "@/lib/preview-host";
 
 type RouteContext = { params: Promise<{ path: string[] }> };
 type Tokens = { accessToken: string; refreshToken: string };
@@ -39,6 +40,12 @@ async function route(request: NextRequest, context: RouteContext) {
   if (!path?.length) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const action = path.join("/");
+  // A public demo cookie must never become authorization to call real backend APIs.
+  if (request.cookies.get(PREVIEW_COOKIE)?.value === "1" &&
+      isPreviewHost(request.nextUrl.hostname) && action !== "auth/login") {
+    return NextResponse.json({ error: "Demo mode uses browser-local data only" },
+      { status: 403, headers: { "Cache-Control": "no-store" } });
+  }
   const origin = request.headers.get("origin");
   if (origin && origin !== request.nextUrl.origin && !["GET", "HEAD"].includes(request.method)) {
     return NextResponse.json({ error: "Cross-origin request rejected" }, { status: 403 });

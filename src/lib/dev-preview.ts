@@ -1,15 +1,12 @@
-// Development-only browser preview. Never forwards preview mutations to the EC2 API.
-export const PREVIEW_COOKIE = "pofit_dev_preview";
+// Isolated browser-local demo. Never forwards demo reads, writes, or mock AI to the EC2 API.
+import { PREVIEW_COOKIE, isPreviewAvailable } from "./preview-host";
 const STORAGE_KEY = "pofit_dev_preview_store_v1";
 export function isPreviewMode(): boolean {
-  return process.env.NODE_ENV === "development" &&
-    typeof window !== "undefined" &&
-    ["localhost", "127.0.0.1"].includes(window.location.hostname) &&
+  return isPreviewAvailable() &&
     document.cookie.split("; ").includes(PREVIEW_COOKIE + "=1");
 }
 export function startPreviewMode(): void {
-  if (process.env.NODE_ENV !== "development" || typeof window === "undefined" ||
-      !["localhost", "127.0.0.1"].includes(window.location.hostname)) return;
+  if (!isPreviewAvailable()) return;
   document.cookie = PREVIEW_COOKIE + "=1; Path=/; SameSite=Lax; Max-Age=86400";
 }
 export function stopPreviewMode(): void {
@@ -232,17 +229,17 @@ function handler(path: string, init: RequestInit = {}): unknown {
     if (extra === "analyze" && method === "POST") {
       const type = q.questionText.includes("지원") ? "MOTIVATION" : "JOB_COMPETENCY";
       return { ...aiMeta, questionType: type,
-        evaluationIntent: "개발 미리보기: 문항의 의도를 직접 분석해 보세요.",
+        evaluationIntent: "데모 모드: 문항의 의도를 직접 분석해 보세요.",
         evidenceQuote: "", recommendedSkills: ["구체적인 경험", "직무 연결"] };
     }
     if (extra === "strategy" && method === "POST") return {
-      ...aiMeta, strengths: ["개발 미리보기용 작성 전략 예시입니다."],
+      ...aiMeta, strengths: ["데모 모드용 작성 전략 예시입니다."],
       evidenceGaps: ["연결한 경험의 실제 행동과 성과를 확인하세요."],
       nextActions: ["상황→행동→결과→직무 연관성의 순서로 작성해 보세요."],
     };
     if (extra === "draft" && method === "POST") {
       if (!selectedIds.length || selectedIds.length !== selected.length) throw new Error("연결된 경험을 선택해 주세요.");
-      const draft = "[개발 미리보기 · AI 생성 아님]\\n" +
+      const draft = "[데모 모드 · AI 생성 아님]\\n" +
         "이 문항에 답하려면 경험의 상황과 나의 행동, 실제 결과를 구체적으로 작성하세요. " +
         "연결 경험을 읽어 사실을 자동 생성하지 않습니다.\\n" +
         "문항: " + q.questionText.slice(0, 160);
@@ -252,7 +249,7 @@ function handler(path: string, init: RequestInit = {}): unknown {
     if (extra === "revise" && method === "POST") {
       const original = String(data.originalText || "");
       if (!original.trim()) throw new Error("먼저 답변을 작성해 주세요.");
-      const revised = "[개발 미리보기 · 첨삭 예시 아님]\\n" + original;
+      const revised = "[데모 모드 · 첨삭 예시 아님]\\n" + original;
       return { ...aiMeta, text: revised, characterCount: cp(revised),
         characterLimit: q.characterLimit, usedExperienceIds: [], changeReasons: ["미리보기는 실제 첨삭을 수행하지 않습니다."] };
     }
@@ -270,7 +267,7 @@ function handler(path: string, init: RequestInit = {}): unknown {
         const requestId = String(data.requestId || uuid());
         const prior = turns.find(turn => turn.requestId === requestId);
         if (prior) return prior;
-        const output = "[개발 미리보기 · 실제 AI 첨삭 아님]\\n" + current;
+        const output = "[데모 모드 · 실제 AI 첨삭 아님]\\n" + current;
         const turn: PreviewAiTurn = { sequenceNo: turns.length + 1, requestId,
           questionType: String(data.questionType || "JOB_COMPETENCY"),
           experienceIds: selectedIds, originalText: current, instruction,
