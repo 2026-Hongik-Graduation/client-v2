@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import Link from "next/link";
 import type { CoverLetter } from "@/lib/cover-letter-api";
 import { coverApi } from "@/lib/cover-letter-api";
@@ -22,6 +22,7 @@ export function ApplicationDetailPanel({
   cover: CoverLetter; onClose: () => void; onSaved: () => Promise<void>;
   onDeleted: () => Promise<void>; onMove: (id: string, stage: Stage) => Promise<void>; moving: boolean;
 }) {
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const [value, setValue] = useState<Values>(empty);
   const [initial, setInitial] = useState<Values>(empty);
   const [loading, setLoading] = useState(true);
@@ -30,6 +31,11 @@ export function ApplicationDetailPanel({
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const dirty = JSON.stringify(value) !== JSON.stringify(initial);
+  useEffect(() => {
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    closeButtonRef.current?.focus();
+    return () => { previous?.focus(); };
+  }, []);
   useEffect(() => {
     let active = true;
     applicationApi.detail(cover.id).then(detail => {
@@ -52,6 +58,22 @@ export function ApplicationDetailPanel({
   }
   function change<K extends keyof Values>(field: K, next: Values[K]) {
     setValue(old => ({ ...old, [field]: next })); setNotice("");
+  }
+  function onDialogKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (event.key === "Escape" && !pending) {
+      event.preventDefault(); close(); return;
+    }
+    if (event.key !== "Tab") return;
+    const elements = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href]',
+    )).filter(item => item.getClientRects().length > 0);
+    if (!elements.length) return;
+    const first = elements[0], last = elements[elements.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault(); last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault(); first.focus();
+    }
   }
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -81,19 +103,19 @@ export function ApplicationDetailPanel({
   return (
     <div className="fixed inset-0 z-[80] flex justify-end bg-black/40 p-0 sm:p-4"
       role="presentation" onMouseDown={e => { if (e.target === e.currentTarget) close(); }}>
-      <section role="dialog" aria-modal="true" aria-labelledby="app-detail-heading"
+      <section role="dialog" aria-modal="true" aria-labelledby="app-detail-heading" onKeyDown={onDialogKeyDown}
         className="flex h-full w-full max-w-[520px] flex-col overflow-y-auto rounded-none bg-background-10 p-5 shadow-xl sm:rounded-3xl sm:p-8">
         <div className="mb-7 flex items-start justify-between gap-4">
           <div>
             <p className="text-sm text-primary-60">{cover.companyName}</p>
             <h2 id="app-detail-heading" className="mt-2 text-xl font-semibold text-text-primary">{cover.positionName}</h2>
           </div>
-          <button type="button" onClick={close}
+          <button ref={closeButtonRef} type="button" onClick={close}
             className="rounded-full bg-background-30 px-3 py-2 text-sm" aria-label="상세 닫기">✕</button>
         </div>
         <div className="mb-5 flex flex-col gap-2">
-          <label className="text-sm font-semibold">지원 단계</label>
-          <select value={cover.applicationStatus || "PLANNED"} disabled={moving || pending || dirty}
+          <label htmlFor="application-detail-stage" className="text-sm font-semibold">지원 단계</label>
+          <select id="application-detail-stage" value={cover.applicationStatus || "PLANNED"} disabled={moving || pending || dirty}
             onChange={e => onMove(cover.id, e.target.value as Stage)} className={field}>
             {STAGES.map(stage => <option key={stage.code} value={stage.code}>{stage.label}</option>)}
           </select>

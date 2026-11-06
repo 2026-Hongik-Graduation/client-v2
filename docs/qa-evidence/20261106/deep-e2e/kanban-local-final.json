@@ -1,0 +1,89 @@
+{
+  "banner": [
+    {
+      "width": 1440,
+      "paragraphWidth": 672,
+      "paragraphHeight": 48,
+      "bannerHeight": 152
+    },
+    {
+      "width": 992,
+      "paragraphWidth": 672,
+      "paragraphHeight": 48,
+      "bannerHeight": 152
+    },
+    {
+      "width": 720,
+      "paragraphWidth": 512,
+      "paragraphHeight": 48,
+      "bannerHeight": 136
+    },
+    {
+      "width": 390,
+      "paragraphWidth": 182,
+      "paragraphHeight": 144,
+      "bannerHeight": 260
+    },
+    {
+      "width": 360,
+      "paragraphWidth": 152,
+      "paragraphHeight": 168,
+      "bannerHeight": 312
+    }
+  ],
+  "modals": [
+    {
+      "width": 512,
+      "height": 572,
+      "x": 464
+    },
+    {
+      "width": 512,
+      "height": 572,
+      "x": 240
+    },
+    {
+      "width": 512,
+      "height": 556,
+      "x": 104
+    },
+    {
+      "width": 358,
+      "height": 572,
+      "x": 16
+    },
+    {
+      "width": 328,
+      "height": 572,
+      "x": 16
+    }
+  ],
+  "cards": [
+    {
+      "stage": "PLANNED",
+      "label": "지원 예정",
+      "company": "QA시연PLANNED",
+      "persisted": true
+    },
+    {
+      "stage": "PREPARING",
+      "label": "서류 준비",
+      "company": "QA시연PREPARING",
+      "persisted": true
+    },
+    {
+      "stage": "SUBMITTED",
+      "label": "제출 완료",
+      "company": "QA시연SUBMITTED",
+      "persisted": true
+    },
+    {
+      "stage": "CLOSED",
+      "label": "전형 종료",
+      "company": "QA시연CLOSED",
+      "persisted": true
+    }
+  ],
+  "errors": [],
+  "apiCalls": []
+}
