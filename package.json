@@ -13,7 +13,10 @@
     "qa:e2e:edge": "node qa/e2e/edge.cjs",
     "qa:e2e:kanban": "node qa/e2e/kanban.cjs",
     "qa:e2e:dialog": "node qa/e2e/dialog.cjs",
-    "qa:e2e:regression": "node qa/e2e/regression.cjs"
+    "qa:e2e:regression": "node qa/e2e/regression.cjs",
+    "qa:integration:local": "node qa/integration/spring-e2e.cjs",
+    "qa:integration:contract": "node qa/integration/openapi-contract.cjs",
+    "qa:integration:deploy": "node qa/integration/deployed-readonly.cjs"
   },
   "dependencies": {
     "motion": "^14.9.0",

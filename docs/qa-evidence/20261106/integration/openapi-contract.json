@@ -1,0 +1,21 @@
+{
+  "checks": 46,
+  "targets": [
+    {
+      "label": "isolated-local",
+      "http": 200,
+      "paths": 59,
+      "methods": 76,
+      "expected": 46,
+      "missing": []
+    },
+    {
+      "label": "ec2",
+      "http": 200,
+      "paths": 59,
+      "methods": 76,
+      "expected": 46,
+      "missing": []
+    }
+  ]
+}
