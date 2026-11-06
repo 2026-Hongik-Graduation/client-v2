@@ -6,7 +6,8 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   // QA browser runners are intentionally Node.js CommonJS scripts.
-  { files: ["qa/e2e/**/*.cjs"], rules: { "@typescript-eslint/no-require-imports": "off" } },
+  { files: ["qa/e2e/**/*.cjs", "qa/integration/**/*.cjs"],
+    rules: { "@typescript-eslint/no-require-imports": "off" } },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

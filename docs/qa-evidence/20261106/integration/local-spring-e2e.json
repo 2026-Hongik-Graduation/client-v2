@@ -1,0 +1,125 @@
+﻿{
+    "target":  "isolated Next + actual Spring Boot + H2 memory + loopback SMTP",
+    "counts":  {
+                   "pass":  29,
+                   "fail":  0
+               },
+    "results":  [
+                    {
+                        "name":  "G0-isolated-backend-openapi",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G0-real-backend-anonymous-401",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G0-signup-local-smtp",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G0-invalid-login-rejected",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G0-browser-login-proxy-cookies",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G0-profile-read-from-Spring",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G0-profile-onboarding-DB-persistence",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G1-real-experience-create",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G1-real-experience-answer-complete",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G1-experience-browser-from-real-backend",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G2-real-cover-create",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G2-real-question-persist",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G2-real-experience-link",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G2-real-cover-version",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G3-real-board-create-sync",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G3-real-board-move-persist",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G3-real-application-detail-persist",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G3-board-browser-real-backend",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G5-interview-browser-real-cover",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G1-ui-create-real-DB-entity",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G1-ui-save-real-DB-answers",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G2-ui-create-real-DB-cover",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G2-ui-save-question-real-DB",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G3-ui-real-card-move-and-detail",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "SEC-account-isolation-on-real-Spring",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G4-Spring-mock-provider-safety",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G0-refresh-rotation-proxy",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G0-logout-revokes-session",
+                        "status":  "PASS"
+                    },
+                    {
+                        "name":  "G0-no-token-in-JS-no-preview",
+                        "status":  "PASS"
+                    }
+                ]
+}

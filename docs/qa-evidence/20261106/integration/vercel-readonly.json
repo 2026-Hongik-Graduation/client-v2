@@ -1,0 +1,44 @@
+{
+  "base": "https://client-v2-one.vercel.app",
+  "totals": {
+    "pass": 7,
+    "fail": 0
+  },
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "expected": true
+    },
+    {
+      "path": "/login",
+      "status": 200,
+      "expected": true
+    },
+    {
+      "path": "/api/experiences",
+      "status": 401,
+      "expected": true
+    },
+    {
+      "path": "/api/cover-letters",
+      "status": 401,
+      "expected": true
+    },
+    {
+      "path": "/api/application-board",
+      "status": 401,
+      "expected": true
+    },
+    {
+      "path": "/api/members/me/profile",
+      "status": 401,
+      "expected": true
+    },
+    {
+      "path": "/api/auth/refresh",
+      "status": 401,
+      "expected": true
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+﻿{
+    "target":  "local-backend-maven-surefire",
+    "suites":  34,
+    "tests":  104,
+    "failures":  0,
+    "errors":  0,
+    "skipped":  0
+}
