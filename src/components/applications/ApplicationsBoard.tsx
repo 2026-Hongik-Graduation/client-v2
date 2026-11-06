@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState, type DragEvent, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 import { ApplicationCard } from "./ApplicationCard";
 import { ApplicationDetailPanel } from "./ApplicationDetailPanel";
@@ -126,6 +126,9 @@ export function ApplicationsBoard() {
   const [busyId, setBusyId] = useState("");
   const [creating, setCreating] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
+  const createTriggerRef = useRef<HTMLElement | null>(null);
+  const createInputRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => { if (showCreate) createInputRef.current?.focus(); }, [showCreate]);
   const [createStage, setCreateStage] = useState<Stage>("PLANNED");
   const [createError, setCreateError] = useState("");
   const [company, setCompany] = useState("");
@@ -208,7 +211,28 @@ export function ApplicationsBoard() {
     if (all.some(item => item.id === id)) void move(id, next);
   }
   function openCreate(stage: Stage = "PLANNED") {
+    createTriggerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     setCreateStage(stage); setCreateError(""); setShowCreate(true);
+  }
+  function closeCreate() {
+    setShowCreate(false);
+    window.setTimeout(() => createTriggerRef.current?.focus(), 0);
+  }
+  function createDialogKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (event.key === "Escape" && !creating) {
+      event.preventDefault(); closeCreate(); return;
+    }
+    if (event.key !== "Tab") return;
+    const elements = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href]',
+    )).filter(item => item.getClientRects().length > 0);
+    if (!elements.length) return;
+    const first = elements[0], last = elements[elements.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault(); last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault(); first.focus();
+    }
   }
   async function add(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -237,7 +261,7 @@ export function ApplicationsBoard() {
           [placedStage]: [placed, ...(prev.columns[placedStage] || [])],
         },
       } : prev);
-      setShowCreate(false); setCompany(""); setPosition(""); setDeadline("");
+      closeCreate(); setCompany(""); setPosition(""); setDeadline("");
       setSearchInput(""); setSearch(""); setStageFilter(""); setView("board");
       setNotice(moveFailed
         ? "지원 카드는 등록됐지만 단계 이동에 실패하여 ‘지원 예정’에 추가됐어요. 카드에서 단계를 다시 선택해 주세요."
@@ -361,12 +385,13 @@ export function ApplicationsBoard() {
       )}
       {showCreate && (
         <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 p-4"
-          role="presentation" onMouseDown={e => { if (e.target === e.currentTarget && !creating) setShowCreate(false); }}>
+          role="presentation" onMouseDown={e => { if (e.target === e.currentTarget && !creating) closeCreate(); }}>
           <section role="dialog" aria-modal="true" aria-labelledby="application-add-title"
+            onKeyDown={createDialogKeyDown}
             className="max-h-[calc(100dvh-32px)] w-full max-w-[512px] overflow-y-auto rounded-3xl bg-background-10 p-6 shadow-lg md:p-8">
             <div className="mb-5 flex items-center justify-between gap-4">
               <h2 id="application-add-title" className="text-xl font-semibold">지원 카드 추가</h2>
-              <button type="button" disabled={creating} onClick={() => setShowCreate(false)}
+              <button type="button" disabled={creating} onClick={closeCreate}
                 className="rounded-full bg-background-30 px-3 py-2 text-sm" aria-label="닫기">✕</button>
             </div>
             <p className="mb-5 text-xs text-text-secondary">
@@ -375,7 +400,7 @@ export function ApplicationsBoard() {
             <form onSubmit={add} className="flex flex-col gap-4">
               {createError && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{createError}</p>}
               <label className="flex flex-col gap-2 text-sm font-semibold">기업명
-                <input value={company} required maxLength={150} onChange={e => setCompany(e.target.value)}
+                <input ref={createInputRef} value={company} required maxLength={150} onChange={e => setCompany(e.target.value)}
                   className={field} placeholder="예) 네이버" />
               </label>
               <label className="flex flex-col gap-2 text-sm font-semibold">지원 직무
@@ -393,7 +418,7 @@ export function ApplicationsBoard() {
                 </select>
               </label>
               <div className="mt-3 flex justify-end gap-3">
-                <button type="button" disabled={creating} onClick={() => setShowCreate(false)}
+                <button type="button" disabled={creating} onClick={closeCreate}
                   className="rounded-3xl border border-background-50 px-5 py-3 text-sm">취소</button>
                 <button type="submit" disabled={creating} className="rounded-3xl bg-primary-60 px-5 py-3 text-sm text-white disabled:opacity-40">
                   {creating ? "등록 중..." : "지원 등록"}

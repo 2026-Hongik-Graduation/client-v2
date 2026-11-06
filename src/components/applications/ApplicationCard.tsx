@@ -41,7 +41,7 @@ export function ApplicationCard({
         </span>
       </button>
       <div className="flex items-center justify-between gap-1">
-        <span className="rounded-full bg-primary-20 px-3 py-1 text-xs font-medium text-primary-60">
+        <span className="rounded-full bg-primary-20 px-3 py-1 text-xs font-medium text-primary-70">
           {COVER_STATE[app.status] || "자소서"}
         </span>
         <span className={`text-right text-xs ${urgent ? "font-semibold text-status-error" : "text-primary-70"}`}>

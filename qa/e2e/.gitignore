@@ -1,0 +1,4 @@
+# Browser tests write transient artifacts beside each script.
+*.json
+*.txt
+*.png
