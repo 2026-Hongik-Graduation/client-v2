@@ -1,0 +1,254 @@
+{
+  "timestamp": "2026-11-06T09:26:54.567Z",
+  "ref": "fix/interview-banner-kanban-add-20261106",
+  "widths": [
+    {
+      "route": "/",
+      "width": 1440,
+      "screen": 1440,
+      "doc": 1440,
+      "body": 1440,
+      "overflow": 0
+    },
+    {
+      "route": "/login",
+      "width": 1440,
+      "screen": 1440,
+      "doc": 1440,
+      "body": 1440,
+      "overflow": 0
+    },
+    {
+      "route": "/experiences",
+      "width": 1440,
+      "screen": 1440,
+      "doc": 1440,
+      "body": 1440,
+      "overflow": 0
+    },
+    {
+      "route": "/cover-letters",
+      "width": 1440,
+      "screen": 1440,
+      "doc": 1440,
+      "body": 1440,
+      "overflow": 0
+    },
+    {
+      "route": "/applications",
+      "width": 1440,
+      "screen": 1440,
+      "doc": 1440,
+      "body": 1440,
+      "overflow": 0
+    },
+    {
+      "route": "/interviews",
+      "width": 1440,
+      "screen": 1440,
+      "doc": 1440,
+      "body": 1440,
+      "overflow": 0
+    },
+    {
+      "route": "/",
+      "width": 1023,
+      "screen": 1023,
+      "doc": 1023,
+      "body": 1023,
+      "overflow": 0
+    },
+    {
+      "route": "/login",
+      "width": 1023,
+      "screen": 1023,
+      "doc": 1023,
+      "body": 1023,
+      "overflow": 0
+    },
+    {
+      "route": "/experiences",
+      "width": 1023,
+      "screen": 1023,
+      "doc": 1023,
+      "body": 1023,
+      "overflow": 0
+    },
+    {
+      "route": "/cover-letters",
+      "width": 1023,
+      "screen": 1023,
+      "doc": 1023,
+      "body": 1023,
+      "overflow": 0
+    },
+    {
+      "route": "/applications",
+      "width": 1023,
+      "screen": 1023,
+      "doc": 1023,
+      "body": 1023,
+      "overflow": 0
+    },
+    {
+      "route": "/interviews",
+      "width": 1023,
+      "screen": 1023,
+      "doc": 1023,
+      "body": 1023,
+      "overflow": 0
+    },
+    {
+      "route": "/",
+      "width": 720,
+      "screen": 720,
+      "doc": 720,
+      "body": 720,
+      "overflow": 0
+    },
+    {
+      "route": "/login",
+      "width": 720,
+      "screen": 720,
+      "doc": 720,
+      "body": 720,
+      "overflow": 0
+    },
+    {
+      "route": "/experiences",
+      "width": 720,
+      "screen": 720,
+      "doc": 720,
+      "body": 720,
+      "overflow": 0
+    },
+    {
+      "route": "/cover-letters",
+      "width": 720,
+      "screen": 720,
+      "doc": 720,
+      "body": 720,
+      "overflow": 0
+    },
+    {
+      "route": "/applications",
+      "width": 720,
+      "screen": 720,
+      "doc": 720,
+      "body": 720,
+      "overflow": 0
+    },
+    {
+      "route": "/interviews",
+      "width": 720,
+      "screen": 720,
+      "doc": 720,
+      "body": 720,
+      "overflow": 0
+    },
+    {
+      "route": "/",
+      "width": 360,
+      "screen": 360,
+      "doc": 360,
+      "body": 360,
+      "overflow": 0
+    },
+    {
+      "route": "/login",
+      "width": 360,
+      "screen": 360,
+      "doc": 360,
+      "body": 360,
+      "overflow": 0
+    },
+    {
+      "route": "/experiences",
+      "width": 360,
+      "screen": 360,
+      "doc": 360,
+      "body": 360,
+      "overflow": 0
+    },
+    {
+      "route": "/cover-letters",
+      "width": 360,
+      "screen": 360,
+      "doc": 360,
+      "body": 360,
+      "overflow": 0
+    },
+    {
+      "route": "/applications",
+      "width": 360,
+      "screen": 360,
+      "doc": 360,
+      "body": 360,
+      "overflow": 0
+    },
+    {
+      "route": "/interviews",
+      "width": 360,
+      "screen": 360,
+      "doc": 360,
+      "body": 360,
+      "overflow": 0
+    }
+  ],
+  "axe": [
+    {
+      "route": "/login",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "route": "/experiences/new",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "route": "/cover-letters/new",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "route": "/applications",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "route": "/interviews",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "route": "/login",
+      "width": 360,
+      "violations": []
+    },
+    {
+      "route": "/experiences/new",
+      "width": 360,
+      "violations": []
+    },
+    {
+      "route": "/cover-letters/new",
+      "width": 360,
+      "violations": []
+    },
+    {
+      "route": "/applications",
+      "width": 360,
+      "violations": []
+    },
+    {
+      "route": "/interviews",
+      "width": 360,
+      "violations": []
+    }
+  ],
+  "label": {
+    "titleAccessName": "경험 제목"
+  },
+  "warnings": []
+}
