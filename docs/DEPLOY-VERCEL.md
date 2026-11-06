@@ -13,6 +13,13 @@
 4. Settings → Environment Variables에 **Preview 전용** `QA_BACKEND_ORIGIN`을 설정한다. 값은 팀에서 승인한 HTTPS QA API origin(예: `https://43-203-204-29.sslip.io`)이며 `/api` 경로를 붙이지 않는다.
 5. 배포한 Preview URL에서 `/`, `/login`, `/experiences`, `/cover-letters`, `/applications`, `/interviews`를 점검한다. 실제 CRUD/AI는 허가된 격리 테스트 계정과 데이터로만 수행한다.
 
+## 공개 시연용 로그인 건너뛰기 (2026-11-06)
+- `https://client-v2-one.vercel.app/login`에서 **로그인 건너뛰기 (데모)** 버튼을 누르면 실제 계정 없이 `/cover-letters`로 이동한다.
+- 허용 호스트는 지정된 공개 배포 주소와 로컬호스트뿐이다. 임의의 Vercel Preview 주소에는 공개하지 않는다.
+- 데모 쿠키는 인증 토큰이 아니다. 경험·자소서·지원 현황·면접 화면의 데모 데이터는 브라우저에만 저장한다.
+- 데모에서 AI로 표시되는 결과는 MOCK이며, 백엔드 API는 데모 쿠키를 받은 요청을 403으로 차단한다(실제 로그인 API는 예외).
+- 이 모드는 실제 인증·DB CRUD·AI 연동 QA 통과를 의미하지 않는다. 운영 계정과 실제 서비스 보안 검증은 별도다.
+
 ## 운영 배포 승인 조건
 - `npm ci`, `npm run lint`, `npm run build`, `npx tsc --noEmit` 통과 및 CI 성공.
 - `docs/QA-RESULTS-20261105.md`의 미완료 통합 QA·보안/접근성/모바일 항목 점검 및 릴리스 담당자 승인.
